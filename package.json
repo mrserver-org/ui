@@ -4,7 +4,7 @@
   "description": "MrServer's frontend.",
   "scripts": {
     "start": "npx http-server -p 1101 -c-1",
-    "dev": "npx nodemon --exec \"npx http-server -p 1101 -c-1\""
+    "dev": "npx http-server -p 1101 -c-1"
   },
   "keywords": [],
   "author": "",
