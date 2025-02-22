@@ -22,6 +22,12 @@
 - A web browser (tested on Firefox and Chromium-based browsers)
 - Any operating system that supports Node.js
 
+### 💻 Installing dependencies
+
+```bash
+pnpm i # or, npm i
+```
+
 ### 👨‍💻 Development
 
 ```bash
