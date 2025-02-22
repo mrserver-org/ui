@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Server Info",
+        "icon": "📊",
+        "function": "info()"
+    },
+    {
+        "name": "Terminal",
+        "icon": "💻",
+        "function": "terminal()"
+    },
+    {
+        "name": "Calculator",
+        "icon": "🔢",
+        "function": "calculator()"
+    },
+    {
+        "name": "Notes",
+        "icon": "📝",
+        "function": "notes()"
+    },
+    {
+        "name": "Settings",
+        "icon": "⚙️",
+        "function": "settings()"
+    },
+    {
+        "name": "File Manager",
+        "icon": "📂",
+        "function": "fm()"
+    }
+]

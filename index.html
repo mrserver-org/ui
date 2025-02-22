@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MrServer</title>
+    <script src="/etc/jquery.min.js"></script>
+    <script src="/etc/xterm.js"></script>
+    <script src="/etc/xterm-addon-fit.min.js"></script>
+    <script src="/etc/sha256.min.js"></script>
+    <link rel="stylesheet" href="/etc/xterm.css">
+    <script>
+        async function loadScripts() {
+          try {
+            const response = await fetch("./apps/.json");
+            const scripts = await response.json();
+      
+            scripts.forEach(script => {
+              const scriptElement = document.createElement("script");
+              scriptElement.src = `/apps/${script}.js`;
+              scriptElement.type = "text/javascript";
+              document.body.appendChild(scriptElement);
+            });
+          } catch (error) {
+            console.error("Failed to load apps:", error);
+          }
+        }
+      
+        loadScripts();
+            (function() {
+            const savedTheme = localStorage.getItem('theme') || 'default';
+            loadTheme(savedTheme);
+            
+            function loadTheme(themeName) {
+                const oldLink = document.getElementById('theme-style');
+                if (oldLink) oldLink.remove();
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `/themes/${themeName}.css`;
+                link.id = 'theme-style';
+                document.head.appendChild(link);
+            }
+            window.setTheme = (themeName) => {
+                localStorage.setItem('theme', themeName);
+                loadTheme(themeName);
+            };
+        })();
+      </script>      
+</head>
+<body>
+    <div id="desktop"></div>
+    <div id="taskbar">
+        <div id="start-button"><img height="25" src="/logo.png"></img></div>
+    </div>
+    <div onclick="jsexec()" id="clock"></div>
+    <div id="start-menu">
+        <div class="start-sidebar">MrServer
+        </div>
+        <div class="start-items">
+            <div class="start-item" onclick="shutdown()">&#x23FB;</div>
+            <div class="start-item" onclick="openApp('reboot')">&#x27F3;</div>
+            <div class="start-item" onclick="bye()">🔒</div>
+            <div class="start-item" onclick="loadapp()">📦</div>
+        </div>
+        <div class="start-content">
+            nothing, i guess.
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MrServer - Login</title>
+    <script src="/etc/sha256.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Ubuntu';
+            src: url('/fonts/ubuntu/Ubuntu-Regular.ttf')  format('truetype'),
+        }
+
+        @font-face {
+            font-family: 'NotoColorEmoji';
+            src: url('/fonts/notocoloremoji/NotoColorEmoji-Regular.ttf')  format('truetype'),
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Ubuntu', 'NotoColorEmoji', 'powerunicode', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: url('/wallpaperdefault.png') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .time {
+            font-size: 5rem;
+            font-weight: lighter;
+            margin-bottom: 0.5rem;
+        }
+
+        .date {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .profile {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .profile:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-icon {
+            font-size: 100px;
+            color: #fff;
+        }
+
+        .username {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .password-container {
+            position: relative;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .password-input, .username-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 24px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .password-input:focus, .username-input:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .password-input::placeholder, .username-input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .submit-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .error-message {
+            color: #ff4444;
+            margin-top: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .show-error {
+            opacity: 1;
+        }
+
+        #nothing {
+            color: transparent;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="time">NULL:NULL</div>
+        <div class="date">NULL, NULL NULL</div>
+        <div class="profile">
+            <div class="profile-icon">👤</div>
+        </div>
+        <div class="password-container">
+            <input type="text" id="username" class="username-input" placeholder="Username">
+        </div>
+        <div id="nothing">
+            NULL
+        </div>
+        <div class="password-container">
+            <input type="password" id="passwd" class="password-input" placeholder="PIN/Password">
+            <button class="submit-btn">→</button>
+        </div>
+        <div class="error-message">Incorrect password or username. Please try again.</div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            const timeElement = document.querySelector('.time');
+            const dateElement = document.querySelector('.date');
+            
+            timeElement.textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
+            
+            dateElement.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        var intervalId = setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        const form = document.querySelector('.password-container');
+        const input = document.querySelector('.password-input');
+        const errorMessage = document.querySelector('.error-message');
+        const username = document.querySelector('#username').value;
+        const usernamei = document.querySelector('#username');
+        const passwd = document.querySelector('#passwd').value;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const credentials = await fetch("http://" + window.location.host.split(':')[0] + ":9091" + "/api/users").then(res => res.json());
+            let hashedPasswd = sha256(input.value);
+            const user = credentials.find(u => u.username === usernamei.value && u.password === hashedPasswd);
+            if (user) {
+                errorMessage.classList.remove('show-error');
+                clearInterval(intervalId);
+                document.body.style.opacity = '0';
+                document.body.style.opacity = '1';
+                document.body.innerHTML = 'NULL';
+                localStorage.setItem('credentials', JSON.stringify({
+                    username: usernamei.value,
+                    password: hashedPasswd
+                }));
+               setTimeout(() => { window.location.href = '/'; }, 2000);
+            } else {
+                errorMessage.classList.add('show-error');
+                input.value = '';
+            }
+        });
+
+        document.querySelector('.submit-btn').addEventListener('click', () => {
+            form.dispatchEvent(new Event('submit'));
+        });
+
+        document.querySelector('.profile').addEventListener('click', () => {
+            document.querySelector('.username-input').focus();
+        });
+    </script>
+</body>
+</html>
