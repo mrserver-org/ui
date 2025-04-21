@@ -1,6 +1,6 @@
 {
   "name": "mrserver-ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MrServer's frontend.",
   "scripts": {
     "start": "npx http-server -p 1101 -c-1",
@@ -8,7 +8,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "http-server": "^14.1.1",
     "nodemon": "^3.1.9"

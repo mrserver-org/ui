@@ -9,15 +9,15 @@
     <script src="/etc/sha256.min.js"></script>
     <link rel="stylesheet" href="/etc/xterm.css">
     <script>
-        async function loadScripts() {
+        async function loadScripts(url) {
           try {
-            const response = await fetch("./apps/.json");
+            const response = await fetch("/" + url + ".json");
             const scripts = await response.json();
       
             scripts.forEach(script => {
               const scriptElement = document.createElement("script");
-              scriptElement.src = `/apps/${script}.js`;
-              scriptElement.type = "text/javascript";
+              scriptElement.src = `/${url}/${script}.js`;
+              scriptElement.type = "module";
               document.body.appendChild(scriptElement);
             });
           } catch (error) {
@@ -25,7 +25,8 @@
           }
         }
       
-        loadScripts();
+        loadScripts("apps");
+        loadScripts("3rd_party_apps");
             (function() {
             const savedTheme = localStorage.getItem('theme') || 'default';
             loadTheme(savedTheme);
