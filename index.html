@@ -11,13 +11,13 @@
     <script>
         async function loadScripts(url) {
           try {
-            const response = await fetch("/" + url + ".json");
+            const response = await fetch("./" + url + "/.json");
             const scripts = await response.json();
       
             scripts.forEach(script => {
               const scriptElement = document.createElement("script");
               scriptElement.src = `/${url}/${script}.js`;
-              scriptElement.type = "module";
+              scriptElement.type = script.startsWith("m_") ? "module" : "text/javascript";
               document.body.appendChild(scriptElement);
             });
           } catch (error) {

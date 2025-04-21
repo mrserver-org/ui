@@ -13,6 +13,9 @@ function generateStartApps() {
         })
 }
 
+function expose(func) {
+    window[func] = func;
+}
 
 function auth_check() {
     const user = JSON.parse(localStorage.getItem("credentials"));
