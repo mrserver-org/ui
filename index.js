@@ -10,7 +10,18 @@ function generateStartApps() {
                 item.addEventListener("click", () => eval(app.function + "; document.querySelector('#start-menu').classList.remove('active');"));
                 document.querySelector(".start-content").appendChild(item);
             });
-        })
+        });
+    fetch("./3rd_party_apps/list.json")
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(app => {
+                const item = document.createElement("div");
+                item.className = "start-item";
+                item.innerHTML = app.icon + "  " + app.name;
+                item.addEventListener("click", () => eval(app.function + "; document.querySelector('#start-menu').classList.remove('active');"));
+                document.querySelector(".start-content").appendChild(item);
+            });
+        });
 }
 
 function expose(func) {
