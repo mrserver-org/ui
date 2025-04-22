@@ -7,6 +7,18 @@ const NotificationType = {
   WARNING: "warning",
 };
 
+const mrfetch = window.fetch;
+window.fetch = function(input, init = {}) {
+  const credentials = JSON.parse(localStorage.getItem("credentials") || "{}");
+  init.headers = {
+    ...(init.headers || {}),
+    username: credentials.username,
+    password: credentials.password
+  };
+  
+  return mrfetch(input, init);
+};
+
 function notify(app, type, message) {
   const validTypes = ["info", "success", "warning", "error"];
   if (!validTypes.includes(type)) {
@@ -88,13 +100,16 @@ function auth_check() {
   const user = JSON.parse(localStorage.getItem("credentials"));
   if (user) {
     fetch(
-      "http://" + window.location.host.split(":")[0] + ":9091" + "/api/users",
+      "http://" + window.location.host.split(":")[0] + ":9091" + "/api/login", {
+		  method: "POST",
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+	  }
     )
       .then((response) => response.json())
       .then((data) => {
-        const isuser = data.find(
-          (u) => u.username === user.username && u.password === user.password,
-        );
+        const isuser = !data.error
         if (isuser) {
           createDesktopIcons();
         } else {

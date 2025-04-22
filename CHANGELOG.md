@@ -8,7 +8,8 @@ v1.1.0
 - Added support for ESM in apps if their file name starts with "m_". e.g. "m_calculator.js".
 - Added `expose(func)` to expose functions if using ESM.
 
-WIP
+v1.2.0
 
 - Added start menu icons for third party apps.
 - New Notification API!
+- Added Role-based authentication.

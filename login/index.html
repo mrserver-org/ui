@@ -194,10 +194,16 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            const credentials = await fetch("http://" + window.location.host.split(':')[0] + ":9091" + "/api/users").then(res => res.json());
-            let hashedPasswd = sha256(input.value);
-            const user = credentials.find(u => u.username === usernamei.value && u.password === hashedPasswd);
+			let hashedPasswd = sha256(input.value);
+            const response = await fetch(
+			"http://" + window.location.host.split(':')[0] + ":9091" + "/api/login",{
+			method: 'POST',
+			headers: {
+			'Content-Type': 'application/json',
+			"username": usernamei.value,
+			"password": hashedPasswd
+			}}).then(res => res.json());
+            const user = !response.error
             if (user) {
                 errorMessage.classList.remove('show-error');
                 clearInterval(intervalId);
