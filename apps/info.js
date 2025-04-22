@@ -1,5 +1,7 @@
 function info() {
-    const windowId = createWindow('System Info', `
+  const windowId = createWindow(
+    "System Info",
+    `
         <div class="system-dashboard">
             <div class="loading-bar"></div>
             <div class="dashboard-content hidden">
@@ -172,75 +174,98 @@ function info() {
                 text-align: center;
             }
         </style>
-    `, 800, 600).id;
+    `,
+    800,
+    600,
+  ).id;
 
-    const contentWindow = document.getElementById(windowId);
-    const loadingBar = contentWindow.querySelector('.loading-bar');
-    const dashboardContent = contentWindow.querySelector('.dashboard-content');
-    const errorMessage = contentWindow.querySelector('.error-message');
+  const contentWindow = document.getElementById(windowId);
+  const loadingBar = contentWindow.querySelector(".loading-bar");
+  const dashboardContent = contentWindow.querySelector(".dashboard-content");
+  const errorMessage = contentWindow.querySelector(".error-message");
 
-    async function fetchSystemInfo() {
-        try {
-            loadingBar.style.width = '30%';
-            const response = await fetch(`http://${window.location.hostname}:9091/api/system`);
-            loadingBar.style.width = '60%';
-            const data = await response.json();
-            loadingBar.style.width = '100%';
-            
-            setTimeout(() => {
-                dashboardContent.classList.remove('hidden');
-                updateUI(data);
-                loadingBar.style.width = '0';
-            }, 300);
-        } catch (error) {
-            loadingBar.style.width = '0';
-            dashboardContent.classList.add('hidden');
-            errorMessage.classList.remove('hidden');
-            errorMessage.textContent = 'Failed to fetch system information';
-            console.error('Fetch error:', error);
-        }
+  async function fetchSystemInfo() {
+    try {
+      loadingBar.style.width = "30%";
+      const response = await fetch(
+        `http://${window.location.hostname}:9091/api/system`,
+      );
+      notify("System Info", NotificationType.INFO, "Loaded system info sucessfully!");
+      loadingBar.style.width = "60%";
+      const data = await response.json();
+      loadingBar.style.width = "100%";
+
+      setTimeout(() => {
+        dashboardContent.classList.remove("hidden");
+        updateUI(data);
+        loadingBar.style.width = "0";
+      }, 300);
+    } catch (error) {
+      loadingBar.style.width = "0";
+      dashboardContent.classList.add("hidden");
+      errorMessage.classList.remove("hidden");
+      errorMessage.textContent = "Failed to fetch system information";
+      console.error("Fetch error:", error);
     }
+  }
 
-    function updateUI(data) {
-        contentWindow.querySelector('.os-platform').textContent = `${data.os.platform} ${data.os.version}`;
-        contentWindow.querySelector('.hostname').textContent = data.os.hostname;
-        contentWindow.querySelector('.hardware-model').textContent = `${data.hardware.manufacturer} ${data.hardware.model}`;
-        const cpuProgress = contentWindow.querySelector('.cpu-usage .progress-ring');
-        const cpuText = contentWindow.querySelector('.cpu-usage .progress-text');
-        const cpuLoad = data.cpu.load.toFixed(1);
-        const cpuCircumference = 2 * Math.PI * 45;
-        cpuProgress.innerHTML = `<circle cx="50" cy="50" r="45" stroke="var(--accent)" stroke-dasharray="${cpuCircumference}" stroke-dashoffset="${cpuCircumference - (cpuLoad / 100 * cpuCircumference)}"/>`;
-        cpuText.textContent = `${cpuLoad}%`;
-        const memUsed = data.memory.used / 1024 ** 3;
-        const memTotal = data.memory.total / 1024 ** 3;
-        const memPercent = ((data.memory.used / data.memory.total) * 100).toFixed(1);
-        const memProgress = contentWindow.querySelector('.memory-usage .progress-ring');
-        const memText = contentWindow.querySelector('.memory-usage .progress-text');
-        memProgress.innerHTML = `<circle cx="50" cy="50" r="45" stroke="var(--border)" stroke-dasharray="${cpuCircumference}" stroke-dashoffset="${cpuCircumference - (memPercent / 100 * cpuCircumference)}"/>`;
-        memText.textContent = `${memPercent}%`;
-        const disksContainer = contentWindow.querySelector('.disks-container');
-        disksContainer.innerHTML = data.storage.disks.map(disk => `
+  function updateUI(data) {
+    contentWindow.querySelector(".os-platform").textContent =
+      `${data.os.platform} ${data.os.version}`;
+    contentWindow.querySelector(".hostname").textContent = data.os.hostname;
+    contentWindow.querySelector(".hardware-model").textContent =
+      `${data.hardware.manufacturer} ${data.hardware.model}`;
+    const cpuProgress = contentWindow.querySelector(
+      ".cpu-usage .progress-ring",
+    );
+    const cpuText = contentWindow.querySelector(".cpu-usage .progress-text");
+    const cpuLoad = data.cpu.load.toFixed(1);
+    const cpuCircumference = 2 * Math.PI * 45;
+    cpuProgress.innerHTML = `<circle cx="50" cy="50" r="45" stroke="var(--accent)" stroke-dasharray="${cpuCircumference}" stroke-dashoffset="${cpuCircumference - (cpuLoad / 100) * cpuCircumference}"/>`;
+    cpuText.textContent = `${cpuLoad}%`;
+    const memUsed = data.memory.used / 1024 ** 3;
+    const memTotal = data.memory.total / 1024 ** 3;
+    const memPercent = ((data.memory.used / data.memory.total) * 100).toFixed(
+      1,
+    );
+    const memProgress = contentWindow.querySelector(
+      ".memory-usage .progress-ring",
+    );
+    const memText = contentWindow.querySelector(".memory-usage .progress-text");
+    memProgress.innerHTML = `<circle cx="50" cy="50" r="45" stroke="var(--border)" stroke-dasharray="${cpuCircumference}" stroke-dashoffset="${cpuCircumference - (memPercent / 100) * cpuCircumference}"/>`;
+    memText.textContent = `${memPercent}%`;
+    const disksContainer = contentWindow.querySelector(".disks-container");
+    disksContainer.innerHTML = data.storage.disks
+      .map(
+        (disk) => `
             <div class="disk-item">
                 <div class="disk-header">
                     <span>${disk.mount} (${disk.type})</span>
                     <span>${(disk.used / 1024 ** 3).toFixed(1)}GiB / ${(disk.size / 1024 ** 3).toFixed(1)}GiB</span>
                 </div>
                 <div class="disk-progress">
-                    <div class="disk-progress-bar" style="width: ${(disk.used / disk.size * 100).toFixed(1)}%; background: var(--accent)"></div>
+                    <div class="disk-progress-bar" style="width: ${((disk.used / disk.size) * 100).toFixed(1)}%; background: var(--accent)"></div>
                 </div>
             </div>
-        `).join('');
-        const interfacesContainer = contentWindow.querySelector('.interfaces-container');
-        interfacesContainer.innerHTML = data.network.interfaces
-            .filter(iface => iface.ip4)
-            .map(iface => `
+        `,
+      )
+      .join("");
+    const interfacesContainer = contentWindow.querySelector(
+      ".interfaces-container",
+    );
+    interfacesContainer.innerHTML = data.network.interfaces
+      .filter((iface) => iface.ip4)
+      .map(
+        (iface) => `
                 <div class="interface-item">
                     <div><strong>${iface.iface}</strong></div>
                     <div>IPv4: ${iface.ip4}</div>
                     <div>MAC: ${iface.mac}</div>
                 </div>
-            `).join('');
-    }
+            `,
+      )
+      .join("");
+  }
 
-    fetchSystemInfo();
+  fetchSystemInfo();
 }

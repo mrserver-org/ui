@@ -1,5 +1,7 @@
 function settings() {
-    createWindow('', `
+  createWindow(
+    "",
+    `
         <center>
         <div id="settings-panel">
             <h1 class="window-title">Settings</h1>
@@ -82,24 +84,30 @@ function settings() {
     font-weight: 500;
 }
     </style>
-    `, 480, 320);
+    `,
+    480,
+    320,
+  );
 
-    fetch('/themes/list.json')
-        .then(response => response.json())
-        .then(data => {
-            const themeSelect = document.getElementById('theme');
-            const savedTheme = localStorage.getItem('theme') || 'default';
+  fetch("/themes/list.json")
+    .then((response) => response.json())
+    .then((data) => {
+      const themeSelect = document.getElementById("theme");
+      const savedTheme = localStorage.getItem("theme") || "default";
 
-            data.forEach(theme => {
-                const option = new Option(theme.name, theme.filename);
-                themeSelect.add(option);
-            });
+      data.forEach((theme) => {
+        const option = new Option(theme.name, theme.filename);
+        themeSelect.add(option);
+      });
 
-            themeSelect.value = savedTheme;
-        });
-
-    document.getElementById('save-settings').addEventListener('click', () => {
-        localStorage.setItem('theme', document.getElementById('theme').value);
-        location.reload();
+      themeSelect.value = savedTheme;
     });
+
+  document.getElementById("save-settings").addEventListener("click", () => {
+    localStorage.setItem("theme", document.getElementById("theme").value);
+    notify("MrServer", NotificationType.INFO, "Applying theme...");
+    setTimeout(() => {
+        location.reload();
+    }, 2000);
+  });
 }

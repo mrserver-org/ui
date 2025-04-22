@@ -11,3 +11,4 @@ v1.1.0
 WIP
 
 - Added start menu icons for third party apps.
+- New Notification API!

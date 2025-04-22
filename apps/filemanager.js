@@ -1,90 +1,128 @@
-let currentPath = '/';
+let currentPath = "/";
 let history = [currentPath];
 
 async function getOS() {
-    const os = await fetch('http://' + window.location.host.split(':')[0] + ":9091" + '/api/system');
-    const osData = await os.json();
-    if (osData.os === 'win32') {
-        currentPath = "C:\\";
-        history = [currentPath];
-    }
+  const os = await fetch(
+    "http://" + window.location.host.split(":")[0] + ":9091" + "/api/system",
+  );
+  const osData = await os.json();
+  if (osData.os === "win32") {
+    currentPath = "C:\\";
+    history = [currentPath];
+  }
 }
 
 getOS();
 
 async function fileContent(fullPath) {
-    const isImage = fullPath.endsWith('.png') || fullPath.endsWith('.jpg') || fullPath.endsWith('.jpeg') || fullPath.endsWith('.gif') || fullPath.endsWith('.bmp') || fullPath.endsWith('.webp') || fullPath.endsWith('.hfif') || fullPath.endsWith('.heic') || fullPath.endsWith('.avif') || fullPath.endsWith('.tiff') || fullPath.endsWith('.tif');
-    const complete_of_url = isImage ? 'download' : 'content' + `?path=${encodeURIComponent(fullPath)}`;
-    const response = await fetch('http://' + window.location.host.split(':')[0] + ":9091" + '/api/file_manager/' + complete_of_url);
-    const content = await response.text();
-    if (isImage) {
-        const url = 'http://' + window.location.host.split(':')[0] + ":9091" + '/api/file_manager/download' + `?path=${encodeURIComponent(fullPath)}`;
-        createWindow("Image Viewer", `
+  const isImage =
+    fullPath.endsWith(".png") ||
+    fullPath.endsWith(".jpg") ||
+    fullPath.endsWith(".jpeg") ||
+    fullPath.endsWith(".gif") ||
+    fullPath.endsWith(".bmp") ||
+    fullPath.endsWith(".webp") ||
+    fullPath.endsWith(".hfif") ||
+    fullPath.endsWith(".heic") ||
+    fullPath.endsWith(".avif") ||
+    fullPath.endsWith(".tiff") ||
+    fullPath.endsWith(".tif");
+  const complete_of_url = isImage
+    ? "download"
+    : "content" + `?path=${encodeURIComponent(fullPath)}`;
+  const response = await fetch(
+    "http://" +
+      window.location.host.split(":")[0] +
+      ":9091" +
+      "/api/file_manager/" +
+      complete_of_url,
+  );
+  const content = await response.text();
+  if (isImage) {
+    const url =
+      "http://" +
+      window.location.host.split(":")[0] +
+      ":9091" +
+      "/api/file_manager/download" +
+      `?path=${encodeURIComponent(fullPath)}`;
+    createWindow(
+      "Image Viewer",
+      `
             <img class="content-image" src='${url}' alt="" style="width: 100%; height: 100%;">
-        `, 400, 300);
-    } else {
-        notesEdit(fullPath, content);
-    }
+        `,
+      400,
+      300,
+    );
+  } else {
+    notesEdit(fullPath, content);
+  }
 }
 
 async function loadDirectory(path) {
-    const fileListDiv = document.getElementById('fileList');
-    fileListDiv.innerHTML = '';
-    document.getElementById('pathInput').value = path;
-    try {
-        const response = await fetch('http://' + window.location.host.split(':')[0] + ":9091" + `/api/file_manager/list?path=${encodeURIComponent(path)}`);
-        const items = await response.json();
-        
-        items.forEach(({ name, path: fullPath, is_dir }) => {
-            const fileItem = document.createElement('div');
-            fileItem.classList.add('file-item');
-            const icon = is_dir ? 
-                '<svg class="folder-icon" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>' :
-                '<svg class="file-icon" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
-            
-            fileItem.innerHTML = `
+  const fileListDiv = document.getElementById("fileList");
+  fileListDiv.innerHTML = "";
+  document.getElementById("pathInput").value = path;
+  try {
+    const response = await fetch(
+      "http://" +
+        window.location.host.split(":")[0] +
+        ":9091" +
+        `/api/file_manager/list?path=${encodeURIComponent(path)}`,
+    );
+    const items = await response.json();
+
+    items.forEach(({ name, path: fullPath, is_dir }) => {
+      const fileItem = document.createElement("div");
+      fileItem.classList.add("file-item");
+      const icon = is_dir
+        ? '<svg class="folder-icon" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>'
+        : '<svg class="file-icon" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>';
+
+      fileItem.innerHTML = `
                 ${icon}
                 <span class="file-name">${name}</span>
             `;
-            fileItem.onclick = () => {
-                if (is_dir) {
-                    history.push(fullPath);
-                    currentPath = fullPath;
-                    loadDirectory(currentPath);
-                } else {
-                    fileContent(fullPath);
-                }
-            };
-            fileListDiv.appendChild(fileItem);
-        });
-    } catch (error) {
-        alert('Error loading directory');
-    }
+      fileItem.onclick = () => {
+        if (is_dir) {
+          history.push(fullPath);
+          currentPath = fullPath;
+          loadDirectory(currentPath);
+        } else {
+          fileContent(fullPath);
+        }
+      };
+      fileListDiv.appendChild(fileItem);
+    });
+  } catch (error) {
+    alert("Error loading directory");
+  }
 }
 
 function goBack() {
-    if (history.length > 1) {
-        history.pop();
-        currentPath = history[history.length - 1];
-        loadDirectory(currentPath);
-    }
+  if (history.length > 1) {
+    history.pop();
+    currentPath = history[history.length - 1];
+    loadDirectory(currentPath);
+  }
 }
 
 function navigatePath() {
-    const newPath = document.getElementById('pathInput').value;
-    history.push(newPath);
-    currentPath = newPath;
-    loadDirectory(path);
+  const newPath = document.getElementById("pathInput").value;
+  history.push(newPath);
+  currentPath = newPath;
+  loadDirectory(path);
 }
 
 function navigateTo(path) {
-    history.push(path);
-    currentPath = path;
-    loadDirectory(path);
+  history.push(path);
+  currentPath = path;
+  loadDirectory(path);
 }
 
 function fm() {
-    createWindow('File Manager', `
+  createWindow(
+    "File Manager",
+    `
         <style>
             .file-manager {
                 display: flex;
@@ -220,6 +258,7 @@ function fm() {
                 <div id="fileList"></div>
             </div>
         </div>
-    `);
-    loadDirectory(currentPath);
+    `,
+  );
+  loadDirectory(currentPath);
 }

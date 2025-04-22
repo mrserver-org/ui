@@ -1,9 +1,13 @@
 function jsexecnow() {
-    document.getElementById('jsexec-status').innerHTML = eval(document.getElementById('jsexec-command').value);
+  document.getElementById("jsexec-status").innerHTML = eval(
+    document.getElementById("jsexec-command").value,
+  );
 }
 
 function jsexec() {
-    createWindow("jsexec", `
+  createWindow(
+    "jsexec",
+    `
         <div style="display: flex; flex-direction: column; align-items: center;">
         <div id="jsexec-app">
             <input type="text" id="jsexec-command" placeholder="Code">
@@ -12,5 +16,8 @@ function jsexec() {
             <div id="jsexec-status"></div>
         </div>
         </div>
-    `, 400, 300);
+    `,
+    400,
+    300,
+  );
 }
