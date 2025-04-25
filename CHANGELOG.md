@@ -14,7 +14,7 @@ v1.2.0
 - New Notification API!
 - Added Role-based authentication.
 
-v1.2.0
+v1.2.1
 
 - Fixed terminal not authenticating properly.
 - Fixed File Manager not loading images
