@@ -13,3 +13,7 @@ v1.2.0
 - Added start menu icons for third party apps.
 - New Notification API!
 - Added Role-based authentication.
+
+WIP
+
+- Fixed terminal not authenticating properly.

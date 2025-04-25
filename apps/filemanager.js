@@ -39,12 +39,13 @@ async function fileContent(fullPath) {
   );
   const content = await response.text();
   if (isImage) {
+	const mrcredentials = JSON.parse(localStorage.getItem('credentials'));
     const url =
       "http://" +
       window.location.host.split(":")[0] +
       ":9091" +
       "/api/file_manager/download" +
-      `?path=${encodeURIComponent(fullPath)}`;
+      `?path=${encodeURIComponent(fullPath)}&username=${mrcredentials.username}&password=${mrcredentials.password}`;
     createWindow(
       "Image Viewer",
       `

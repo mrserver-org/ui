@@ -12,7 +12,8 @@ function terminal() {
   });
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
   const host = window.location.hostname;
-  const ws = new WebSocket(`${protocol}://${host}:9091/api/terminal`);
+  const mrcredentials = JSON.parse(localStorage.getItem('credentials'));
+  const ws = new WebSocket(`${protocol}://${host}:9091/api/terminal?username=${mrcredentials.username}&password=${mrcredentials.password}`);
   let resizeObserver;
 
   const calculateDimensions = () => {
