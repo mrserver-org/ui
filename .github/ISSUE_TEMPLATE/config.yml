@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 MrServer Documentation
+    url: https://mrserverdocs.vercel.app
+    about: Check our documentation before creating an issue
+  - name: 💬 GitHub Discussions
+    url: https://github.com/mrserver-org/ui/discussions
+    about: Please ask and answer questions here
+    
