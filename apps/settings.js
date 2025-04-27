@@ -107,7 +107,7 @@ function settings() {
     localStorage.setItem("theme", document.getElementById("theme").value);
     notify("MrServer", NotificationType.INFO, "Applying theme...");
     setTimeout(() => {
-        location.reload();
+      location.reload();
     }, 2000);
   });
 }

@@ -3,6 +3,7 @@
   <h1>MrServer</h1>
   <p><em>Maximize your server.</em></p>
 </div>
+<a href="https://www.producthunt.com/posts/mrserver?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-mrserver" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=958370&theme=light&t=1745788779082" alt="MrServer - Maximize&#0032;your&#0032;server&#0046; | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
 **MrServer** (said as "Mister Server") is a web-based server management platform with a desktop-like experience.
 

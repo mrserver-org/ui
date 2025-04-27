@@ -39,7 +39,7 @@ async function fileContent(fullPath) {
   );
   const content = await response.text();
   if (isImage) {
-	const mrcredentials = JSON.parse(localStorage.getItem('credentials'));
+    const mrcredentials = JSON.parse(localStorage.getItem("credentials"));
     const url =
       "http://" +
       window.location.host.split(":")[0] +

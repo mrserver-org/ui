@@ -19,6 +19,24 @@ window.fetch = function(input, init = {}) {
   return mrfetch(input, init);
 };
 
+const mralert = window.alert;
+window.alert = function(message, title = "Alert", width = 400, height = 300) {
+  let alertId = message.trim() + title.trim(); // tbh, thats weird ID idea ever
+  let alertBox;
+  alertBox = createWindow(title,`
+        <div class="alert-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="alert-message">${message}</div>
+			<br>
+            <div class="alert-buttons">
+                <button class="alert-button" id="${alertId}">OK</button>
+            </div>
+        </div>
+    `, width, height);
+  document.getElementById(alertId).onclick = () => {
+	  closeWindow(alertBox);
+  };
+};
+
 function notify(app, type, message) {
   const validTypes = ["info", "success", "warning", "error"];
   if (!validTypes.includes(type)) {
@@ -358,9 +376,9 @@ function createDesktopIcons() {
   });
 }
 
-function closeWindow(window) {
-  window.remove();
-  windows = windows.filter((w) => w !== window);
+function closeWindow(thewindow) {
+  thewindow.remove();
+  windows = windows.filter((w) => w !== thewindow);
 }
 
 function maximizeWindow(window) {

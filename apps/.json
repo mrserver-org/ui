@@ -8,5 +8,7 @@
   "loadApp",
   "filemanager",
   "info",
-  "notes-edit"
+  "notes-edit",
+  "processmanager",
+  "cron"
 ]

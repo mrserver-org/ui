@@ -18,3 +18,12 @@ v1.2.1
 
 - Fixed terminal not authenticating properly.
 - Fixed File Manager not loading images
+
+WIP
+
+- Added new built-in app, Process Manager!
+- Modified `alert` API to use MrServer windows.
+Now: `alert(message, title = "Alert", width = 400, height = 400)`
+Before: `alert(message)` (old one can be called using `mralert(message)`
+- Reduced themes file sizes by putting universal stuff in global.css
+- Added Scheduler App

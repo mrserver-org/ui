@@ -190,7 +190,11 @@ function info() {
       const response = await fetch(
         `http://${window.location.hostname}:9091/api/system`,
       );
-      notify("System Info", NotificationType.INFO, "Loaded system info sucessfully!");
+      notify(
+        "System Info",
+        NotificationType.INFO,
+        "Loaded system info sucessfully!",
+      );
       loadingBar.style.width = "60%";
       const data = await response.json();
       loadingBar.style.width = "100%";
