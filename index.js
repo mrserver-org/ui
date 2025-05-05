@@ -20,18 +20,22 @@ window.fetch = function(input, init = {}) {
 };
 
 const mralert = window.alert;
-window.alert = function(message, title = "Alert", width = 400, height = 300) {
-  let alertId = message.trim() + title.trim(); // tbh, thats weird ID idea ever
+window.alert = function(message, title = "Alert", width = 100, height = 50) {
+  let alertId = message.trim().substr(1,9) + title.trim(); // tbh, thats weird ID idea ever
   let alertBox;
   alertBox = createWindow(title,`
-        <div class="alert-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="alert-message">${message}</div>
+        <div class="dialog alert-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%;">
+		    <div class="alert-message dialog-title">${title}</div>
+            <div class="alert-message dialog-content">${message}</div>
 			<br>
-            <div class="alert-buttons">
+            <div class="dialog-actions">
                 <button class="alert-button" id="${alertId}">OK</button>
             </div>
         </div>
-    `, width, height);
+    `, width, height, true);
+  alertBox.querySelector(".window-header").remove();
+  alertBox.style.top = `40%`;
+  alertBox.style.left = `40%`;
   document.getElementById(alertId).onclick = () => {
 	  closeWindow(alertBox);
   };
@@ -226,80 +230,92 @@ function makeResizable(window, handle, direction) {
   }
 }
 
-function createWindow(title, content, width = 400, height = 300) {
+function createWindow(title, content, width = 400, height = 300, hidden = false, icon = "path") {
   const window = document.createElement("div");
-  window.classList = ["window"];
-  window.id = "window-" + title.toLowerCase().replace(" ", "-");
-  window.style.width = width + "px";
-  window.style.height = height + "px";
-  window.style.left = Math.random() * (window.innerWidth - width) + "px";
-  window.style.top = Math.random() * (window.innerHeight - height - 40) + "px";
-
-  window.innerHTML = `
-                  <div class="window-header ${title.toLowerCase().replace(" ", "-")}-header">
-                      <span>${title}</span>
-                      <div class="window-controls ${title.toLowerCase().replace(" ", "-")}-controls">
-                          <div onmouseover="controlButtonEnter()" onmouseleave="controlButtonOut()" class="control-button maximize ${title.toLowerCase().replace(" ", "-")}-maximize"><center>+</center></div>
-                          <div onmouseover="controlButtonEnter()" onmouseleave="controlButtonOut()" class="control-button close ${title.toLowerCase().replace(" ", "-")}-close">X</div>
-                      </div>
-                  </div>
-                  <div class="window-content ${title.toLowerCase().replace(" ", "-")}-content">
-                      ${content}
-                  </div>
-              `;
-
-  const handles = [
-    { class: "resize-n", style: "top: 0; left: 0; right: 0; height: 5px;" },
-    { class: "resize-e", style: "top: 0; right: 0; bottom: 0; width: 5px;" },
-    { class: "resize-s", style: "bottom: 0; left: 0; right: 0; height: 5px;" },
-    { class: "resize-w", style: "top: 0; left: 0; bottom: 0; width: 5px;" },
-    { class: "resize-ne", style: "top: 0; right: 0; width: 5px; height: 5px;" },
-    { class: "resize-nw", style: "top: 0; left: 0; width: 5px; height: 5px;" },
-    {
-      class: "resize-se",
-      style: "bottom: 0; right: 0; width: 5px; height: 5px;",
-    },
-    {
-      class: "resize-sw",
-      style: "bottom: 0; left: 0; width: 5px; height: 5px;",
-    },
+ window.classList = ["window"];
+ window.id = "window-" + title.toLowerCase().replace(" ", "-");
+ window.style.width = width + "px";
+ window.style.height = height + "px";
+ window.style.left = Math.random() * (window.innerWidth - width) + "px";
+ window.style.top = Math.random() * (window.innerHeight - height - 40) + "px";
+ window.innerHTML = `
+  <div class="window-header ${title.toLowerCase().replace(" ", "-")}-header">
+  <span>${title}</span>
+  <div class="window-controls ${title.toLowerCase().replace(" ", "-")}-controls">
+  <div onmouseover="controlButtonEnter()" onmouseleave="controlButtonOut()" class="control-button maximize ${title.toLowerCase().replace(" ", "-")}-maximize"><center>+</center></div>
+  <div onmouseover="controlButtonEnter()" onmouseleave="controlButtonOut()" class="control-button close ${title.toLowerCase().replace(" ", "-")}-close">X</div>
+  </div>
+  </div>
+  <div class="window-content ${title.toLowerCase().replace(" ", "-")}-content">
+ ${content}
+  </div>
+  `;
+ const handles = [
+  { class: "resize-n", style: "top: 0; left: 0; right: 0; height: 5px;" },
+  { class: "resize-e", style: "top: 0; right: 0; bottom: 0; width: 5px;" },
+  { class: "resize-s", style: "bottom: 0; left: 0; right: 0; height: 5px;" },
+  { class: "resize-w", style: "top: 0; left: 0; bottom: 0; width: 5px;" },
+  { class: "resize-ne", style: "top: 0; right: 0; width: 5px; height: 5px;" },
+  { class: "resize-nw", style: "top: 0; left: 0; width: 5px; height: 5px;" },
+  {
+ class: "resize-se",
+ style: "bottom: 0; right: 0; width: 5px; height: 5px;",
+  },
+  {
+ class: "resize-sw",
+ style: "bottom: 0; left: 0; width: 5px; height: 5px;",
+  },
   ];
-
-  handles.forEach((handle) => {
-    const div = document.createElement("div");
-    div.className = `resize-handle ${handle.class}`;
-    div.style.cssText = `position: absolute; ${handle.style}`;
-    window.appendChild(div);
-    makeResizable(window, div, handle.class);
+ handles.forEach((handle) => {
+ const div = document.createElement("div");
+ div.className = `resize-handle ${handle.class}`;
+ div.style.cssText = `position: absolute; ${handle.style}`;
+ window.appendChild(div);
+ makeResizable(window, div, handle.class);
   });
-
-  document.getElementById("desktop").appendChild(window);
-  makeWindowDraggable(window);
-  windows.push(window);
-
-  window.addEventListener("mousedown", () => {
-    focusWindow(window);
+ document.getElementById("desktop").appendChild(window);
+ makeWindowDraggable(window);
+ windows.push(window);
+ window.addEventListener("mousedown", () => {
+ focusWindow(window);
   });
-
-  window.querySelector(".close").addEventListener("click", () => {
-    closeWindow(window);
+ window.querySelector(".close").addEventListener("click", () => {
+ closeWindow(window);
   });
-
-  window.querySelector(".maximize").addEventListener("click", () => {
-    maximizeWindow(window);
+ window.querySelector(".maximize").addEventListener("click", () => {
+ maximizeWindow(window);
   });
-
-  focusWindow(window);
-  return window;
-}
+ if (!hidden) {
+   const titlemod = title ? title : "Settings";
+   const taskbarIcon = document.createElement("span");
+   taskbarIcon.className = "taskbar-icon start-button";
+   taskbarIcon.dataset.windowId = window.id;
+   taskbarIcon.title = titlemod;
+   taskbarIcon.id = "start-button";
+   taskbarIcon.style.position = "relative";
+   taskbarIcon.style.top = "-15px";
+   taskbarIcon.style.textAlign = "center";
+   taskbarIcon.style.maxHeight = "40px";
+   taskbarIcon.innerHTML = `${icon && icon != "path" ? icon : titlemod.charAt(0).toUpperCase()}`;
+   taskbarIcon.addEventListener("click", () => {
+     focusWindow(window);
+   });
+   taskbarIcon.addEventListener("destroy", () => {
+    document.querySelector("#start-buttons").removeChild(taskbarIcon);
+   });
+   document.querySelector("#start-buttons").appendChild(taskbarIcon);
+  }
+ focusWindow(window);
+ return window;
+ }
 
 function focusWindow(window) {
   activeWindow = window;
   window.style.zIndex = ++highestZIndex;
 }
 
-function makeWindowDraggable(window) {
-  const header = window.querySelector(".window-header");
+function makeWindowDraggable(thewindow) {
+  const header = thewindow.querySelector(".window-header");
   let pos1 = 0,
     pos2 = 0,
     pos3 = 0,
@@ -313,7 +329,7 @@ function makeWindowDraggable(window) {
     pos4 = e.clientY;
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
-    focusWindow(window);
+    focusWindow(thewindow);
   }
 
   function elementDrag(e) {
@@ -322,8 +338,8 @@ function makeWindowDraggable(window) {
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
-    window.style.top = window.offsetTop - pos2 + "px";
-    window.style.left = window.offsetLeft - pos1 + "px";
+    thewindow.style.top = thewindow.offsetTop - pos2 + "px";
+    thewindow.style.left = thewindow.offsetLeft - pos1 + "px";
   }
 
   function closeDragElement() {
@@ -377,6 +393,7 @@ function createDesktopIcons() {
 }
 
 function closeWindow(thewindow) {
+  document.querySelector(`span[data-window-id="${thewindow.id}"]`).dispatchEvent(new Event("destroy"));
   thewindow.remove();
   windows = windows.filter((w) => w !== thewindow);
 }

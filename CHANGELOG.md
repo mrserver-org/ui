@@ -27,3 +27,8 @@ Now: `alert(message, title = "Alert", width = 400, height = 400)`
 Before: `alert(message)` (old one can be called using `mralert(message)`
 - Reduced themes file sizes by putting universal stuff in global.css
 - Added Scheduler App
+- Material 3 Theme! (+ wallpaper)
+- Removed uptime from system info because it wasnt working.
+- Added NodeJS, Yarn, Docker and NPM versions.
+- Made system info app real-time info. (beta)
+- Added Taskbar Icons, that focuses windows and destroyes if the window is destroyed (beta, might have bugs)

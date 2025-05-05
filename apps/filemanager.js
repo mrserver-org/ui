@@ -170,19 +170,6 @@ function fm() {
                 gap: 8px;
             }
 
-            .button {
-                padding: 6px 12px;
-                border: 1px solid var(--border);
-                background: var(--win11-bg);
-                border-radius: 4px;
-                cursor: pointer;
-                color: var(--win11-text);
-            }
-
-            .button:hover {
-                background: var(--accent);
-            }
-
             .input {
                 padding: 6px 12px;
                 border: 1px solid var(--border);
@@ -254,7 +241,7 @@ function fm() {
                         </svg>
                     </button>
                     <input type="text" id="pathInput" class="input" style="flex: 1;" placeholder="Enter path">
-                    <button class="button" onclick="navigatePath()">Go</button>
+                    <button onclick="navigatePath()">Go</button>
                 </div>
                 <div id="fileList"></div>
             </div>

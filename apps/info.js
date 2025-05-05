@@ -22,8 +22,20 @@ function info() {
                                 <span class="hardware-model">-</span>
                             </div>
                             <div class="stat-item">
-                                <label>Uptime</label>
-                                <span class="uptime">-</span>
+                                <label>Node JS</label>
+                                <span class="nodejsver">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>NPM</label>
+                                <span class="npmver">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>Yarn</label>
+                                <span class="yarnver">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>Docker</label>
+                                <span class="dockerver">-</span>
                             </div>
                         </div>
                     </div>
@@ -184,16 +196,20 @@ function info() {
   const dashboardContent = contentWindow.querySelector(".dashboard-content");
   const errorMessage = contentWindow.querySelector(".error-message");
 
+  async function firstFetchSystemInfo() {
+    await fetchSystemInfo();
+    notify(
+        "System Info",
+        NotificationType.INFO,
+        "Loaded system info sucessfully!",
+      );
+  }
+
   async function fetchSystemInfo() {
     try {
       loadingBar.style.width = "30%";
       const response = await fetch(
         `http://${window.location.hostname}:9091/api/system`,
-      );
-      notify(
-        "System Info",
-        NotificationType.INFO,
-        "Loaded system info sucessfully!",
       );
       loadingBar.style.width = "60%";
       const data = await response.json();
@@ -214,11 +230,16 @@ function info() {
   }
 
   function updateUI(data) {
+    console.table(data);
     contentWindow.querySelector(".os-platform").textContent =
-      `${data.os.platform} ${data.os.version}`;
+      `${data.os.distro} ${data.os.version}`;
     contentWindow.querySelector(".hostname").textContent = data.os.hostname;
+    contentWindow.querySelector(".nodejsver").textContent = data.software.node ?? "Not Installed"; // impossible
+    contentWindow.querySelector(".npmver").textContent = data.software.npm ?? "Not Installed";
+    contentWindow.querySelector(".yarnver").textContent = data.software.yarn ?? "Not Installed";
+    contentWindow.querySelector(".dockerver").textContent = data.software.docker ?? "Not Installed";
     contentWindow.querySelector(".hardware-model").textContent =
-      `${data.hardware.manufacturer} ${data.hardware.model}`;
+      `${data.hardware.manufacturer} ${data.hardware.version}`;
     const cpuProgress = contentWindow.querySelector(
       ".cpu-usage .progress-ring",
     );
@@ -269,7 +290,8 @@ function info() {
             `,
       )
       .join("");
+    fetchSystemInfo();
   }
 
-  fetchSystemInfo();
+  firstFetchSystemInfo();
 }
