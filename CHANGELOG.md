@@ -32,3 +32,4 @@ Before: `alert(message)` (old one can be called using `mralert(message)`
 - Added NodeJS, Yarn, Docker and NPM versions.
 - Made system info app real-time info. (beta)
 - Added Taskbar Icons, that focuses windows and destroyes if the window is destroyed (beta, might have bugs)
+- Added Auto-Maximize Windows if device is a phone/small screen device.

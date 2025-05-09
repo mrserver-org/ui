@@ -19,6 +19,14 @@ window.fetch = function(input, init = {}) {
   return mrfetch(input, init);
 };
 
+function isPhone() {
+  return window.innerWidth <= 768;
+}
+
+function isMobileUserAgent() {
+  return /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 const mralert = window.alert;
 window.alert = function(message, title = "Alert", width = 100, height = 50) {
   let alertId = message.trim().substr(1,9) + title.trim(); // tbh, thats weird ID idea ever
@@ -304,6 +312,9 @@ function createWindow(title, content, width = 400, height = 300, hidden = false,
     document.querySelector("#start-buttons").removeChild(taskbarIcon);
    });
    document.querySelector("#start-buttons").appendChild(taskbarIcon);
+   if (isPhone() || isMobileUserAgent()) {
+     maximizeWindow(window);
+   }
   }
  focusWindow(window);
  return window;
