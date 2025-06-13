@@ -2,6 +2,10 @@ function terminal() {
   const win = createWindow(
     "Terminal",
     `<div id="terminal" style="background:transparent;position:absolute;left:0;right:0;width:100%;height:100%;"></div>`,
+    400,
+    300,
+    false,
+    "💻",
   );
   const term = new Terminal({
     allowTransparency: true,

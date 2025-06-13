@@ -8,6 +8,8 @@ function notesEdit(path, content) {
     `,
     400,
     300,
+    false,
+    "💾",
   );
   const newHeaderButton = document.createElement("div");
   newHeaderButton.classList = ["control-button", "minimize"]; // "minimize" is the extra button.

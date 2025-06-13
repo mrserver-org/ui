@@ -15,5 +15,7 @@ function bye() {
         </center>`,
     400,
     300,
+    false,
+    "🔒",
   );
 }

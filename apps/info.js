@@ -189,6 +189,8 @@ function info() {
     `,
     800,
     600,
+    false,
+    "📊",
   ).id;
 
   const contentWindow = document.getElementById(windowId);
@@ -199,10 +201,10 @@ function info() {
   async function firstFetchSystemInfo() {
     await fetchSystemInfo();
     notify(
-        "System Info",
-        NotificationType.INFO,
-        "Loaded system info sucessfully!",
-      );
+      "System Info",
+      NotificationType.INFO,
+      "Loaded system info sucessfully!",
+    );
   }
 
   async function fetchSystemInfo() {
@@ -214,7 +216,6 @@ function info() {
       loadingBar.style.width = "60%";
       const data = await response.json();
       loadingBar.style.width = "100%";
-
       setTimeout(() => {
         dashboardContent.classList.remove("hidden");
         updateUI(data);
@@ -230,14 +231,17 @@ function info() {
   }
 
   function updateUI(data) {
-    console.table(data);
     contentWindow.querySelector(".os-platform").textContent =
       `${data.os.distro} ${data.os.version}`;
     contentWindow.querySelector(".hostname").textContent = data.os.hostname;
-    contentWindow.querySelector(".nodejsver").textContent = data.software.node ?? "Not Installed"; // impossible
-    contentWindow.querySelector(".npmver").textContent = data.software.npm ?? "Not Installed";
-    contentWindow.querySelector(".yarnver").textContent = data.software.yarn ?? "Not Installed";
-    contentWindow.querySelector(".dockerver").textContent = data.software.docker ?? "Not Installed";
+    contentWindow.querySelector(".nodejsver").textContent =
+      data.software.node ?? "Not Installed"; // impossible
+    contentWindow.querySelector(".npmver").textContent =
+      data.software.npm ?? "Not Installed";
+    contentWindow.querySelector(".yarnver").textContent =
+      data.software.yarn ?? "Not Installed";
+    contentWindow.querySelector(".dockerver").textContent =
+      data.software.docker ?? "Not Installed";
     contentWindow.querySelector(".hardware-model").textContent =
       `${data.hardware.manufacturer} ${data.hardware.version}`;
     const cpuProgress = contentWindow.querySelector(

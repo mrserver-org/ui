@@ -27,5 +27,7 @@ function shutdown() {
         <div style="text-align: center;" class="shutdown-app">Are you sure you want to shutdown? <br>This will shutdown the server. <br><br><button class="shutdown-button" onclick="shutdown_now();">Shutdown</button></div></center>`,
     400,
     300,
+    false,
+    "&#x23FB;",
   );
 }

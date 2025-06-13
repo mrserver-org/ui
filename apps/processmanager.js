@@ -142,7 +142,11 @@ function processmanager() {
                 color: #f38ba8;
             }
         </style>
-    `,
+		`,
+    400,
+    300,
+    false,
+    "🔍",
   );
   let selectedPid = null;
   function fetchProcesses() {
@@ -186,7 +190,7 @@ function processmanager() {
                                     </td>
                                 </tr>
                             `;
-		notify("Process Manager", NotificationType.ERROR, error.message);
+        notify("Process Manager", NotificationType.ERROR, error.message);
       });
   }
 
@@ -207,7 +211,11 @@ function processmanager() {
       .then((data) => {
         if (data.success) {
           fetchProcesses();
-          notify("Process Manager", NotificationType.SUCESS, `Process ${selectedPid} Terminated Sucessfully.`);
+          notify(
+            "Process Manager",
+            NotificationType.SUCESS,
+            `Process ${selectedPid} Terminated Sucessfully.`,
+          );
         } else {
           notify("Process Manager", NotificationType.ERROR, data.error);
         }

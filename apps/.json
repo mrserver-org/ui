@@ -10,5 +10,6 @@
   "info",
   "notes-edit",
   "processmanager",
-  "cron"
+  "cron",
+  "quicklaunch"
 ]

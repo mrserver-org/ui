@@ -377,12 +377,16 @@ function scheduler() {
             .status-paused {
                 color: #fab387;
             }
-            
+
             .status-error {
                 color: #f38ba8;
             }
         </style>
     `,
+    400,
+    300,
+    false,
+    "⏲️",
   );
 
   const secondEl = document.getElementById("second");
@@ -397,23 +401,20 @@ function scheduler() {
   const schedulerForm = document.getElementById("schedulerForm");
   const refreshBtn = document.getElementById("refreshBtn");
   const templateBtns = document.querySelectorAll(".template-btn");
-  
   let currentJobId = null;
-
   function updateCronPreview() {
     const cronExpression = `${secondEl.value} ${minuteEl.value} ${hourEl.value} ${dayEl.value} ${monthEl.value} ${weekdayEl.value}`;
     cronPreviewEl.textContent = cronExpression;
   }
 
-  [secondEl, minuteEl, hourEl, dayEl, monthEl, weekdayEl].forEach(element => {
+  [secondEl, minuteEl, hourEl, dayEl, monthEl, weekdayEl].forEach((element) => {
     element.addEventListener("input", updateCronPreview);
   });
-  
-  templateBtns.forEach(btn => {
-    btn.addEventListener("click", function() {
+
+  templateBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
       const template = this.getAttribute("data-template");
       const parts = template.split(" ");
-      
       if (parts.length === 6) {
         secondEl.value = parts[0];
         minuteEl.value = parts[1];
@@ -428,30 +429,27 @@ function scheduler() {
 
   function fetchJobs() {
     fetch("http://" + window.location.hostname + ":9091/api/cron/jobs")
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const tableBody = document.getElementById("jobsTableBody");
         tableBody.innerHTML = "";
-        
         if (data.jobs && data.jobs.length > 0) {
-          data.jobs.forEach(job => {
+          data.jobs.forEach((job) => {
             const row = document.createElement("tr");
-            
-            const statusClass = job.running ? 'status-active' : 'status-paused';
-            const statusText = job.running ? 'Active' : 'Paused';
-            const toggleBtnText = job.running ? 'Pause' : 'Resume';
-            const toggleBtnClass = job.running ? 'pause-btn' : 'resume-btn';
-            
+            const statusClass = job.running ? "status-active" : "status-paused";
+            const statusText = job.running ? "Active" : "Paused";
+            const toggleBtnText = job.running ? "Pause" : "Resume";
+            const toggleBtnClass = job.running ? "pause-btn" : "resume-btn";
             row.innerHTML = `
               <td>${job.name}</td>
               <td>${job.schedule}</td>
               <td class="command-cell">
                 <div class="tooltip">
-                  ${job.command.length > 30 ? job.command.substring(0, 30) + '...' : job.command}
+                  ${job.command.length > 30 ? job.command.substring(0, 30) + "..." : job.command}
                   <span class="tooltip-text">${job.command}</span>
                 </div>
               </td>
-              <td>${job.nextRun || 'N/A'}</td>
+              <td>${job.nextRun || "N/A"}</td>
               <td class="${statusClass}">${statusText}</td>
               <td class="actions">
                 <button class="action-btn edit-btn" data-id="${job.id}">Edit</button>
@@ -461,21 +459,29 @@ function scheduler() {
             `;
             tableBody.appendChild(row);
           });
-          
-          document.querySelectorAll(".edit-btn").forEach(btn => {
-            btn.addEventListener("click", () => editJob(btn.getAttribute("data-id")));
+
+          document.querySelectorAll(".edit-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              editJob(btn.getAttribute("data-id")),
+            );
           });
-          
-          document.querySelectorAll(".delete-btn").forEach(btn => {
-            btn.addEventListener("click", () => deleteJob(btn.getAttribute("data-id")));
+
+          document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", () =>
+              deleteJob(btn.getAttribute("data-id")),
+            );
           });
-          
-          document.querySelectorAll(".pause-btn, .resume-btn").forEach(btn => {
-            btn.addEventListener("click", () => toggleJobStatus(
-              btn.getAttribute("data-id"), 
-              btn.getAttribute("data-running") === "true"
-            ));
-          });
+
+          document
+            .querySelectorAll(".pause-btn, .resume-btn")
+            .forEach((btn) => {
+              btn.addEventListener("click", () =>
+                toggleJobStatus(
+                  btn.getAttribute("data-id"),
+                  btn.getAttribute("data-running") === "true",
+                ),
+              );
+            });
         } else {
           tableBody.innerHTML = `
             <tr>
@@ -484,7 +490,7 @@ function scheduler() {
           `;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         document.getElementById("jobsTableBody").innerHTML = `
           <tr>
             <td colspan="6" class="loading-cell" style="color: #f38ba8;">
@@ -498,63 +504,70 @@ function scheduler() {
 
   function addJob(event) {
     event.preventDefault();
-    
     const jobData = {
       name: jobNameEl.value,
       command: commandEl.value,
-      schedule: `${secondEl.value} ${minuteEl.value} ${hourEl.value} ${dayEl.value} ${monthEl.value} ${weekdayEl.value}`
+      schedule: `${secondEl.value} ${minuteEl.value} ${hourEl.value} ${dayEl.value} ${monthEl.value} ${weekdayEl.value}`,
     };
-    
-    const apiEndpoint = currentJobId ? 
-      `http://${window.location.hostname}:9091/api/cron/update/${currentJobId}` : 
-      `http://${window.location.hostname}:9091/api/cron/add`;
-    
+    const apiEndpoint = currentJobId
+      ? `http://${window.location.hostname}:9091/api/cron/update/${currentJobId}`
+      : `http://${window.location.hostname}:9091/api/cron/add`;
     const method = currentJobId ? "PUT" : "POST";
-    
     fetch(apiEndpoint, {
       method: method,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(jobData)
+      body: JSON.stringify(jobData),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.success) {
           resetForm();
           fetchJobs();
-          notify("Scheduler", NotificationType.SUCCESS, currentJobId ? 
-            `Job "${jobData.name}" updated successfully` : 
-            `Job "${jobData.name}" scheduled successfully`);
+          notify(
+            "Scheduler",
+            NotificationType.SUCCESS,
+            currentJobId
+              ? `Job "${jobData.name}" updated successfully`
+              : `Job "${jobData.name}" scheduled successfully`,
+          );
         } else {
-          notify("Scheduler", NotificationType.ERROR, data.error || "Failed to process job");
+          notify(
+            "Scheduler",
+            NotificationType.ERROR,
+            data.error || "Failed to process job",
+          );
         }
       })
-      .catch(error => {
+      .catch((error) => {
         notify("Scheduler", NotificationType.ERROR, error.message);
       });
   }
-  
+
   function resetForm() {
     schedulerForm.reset();
     secondEl.value = "0";
-    minuteEl.value = hourEl.value = dayEl.value = monthEl.value = weekdayEl.value = "*";
+    minuteEl.value =
+      hourEl.value =
+      dayEl.value =
+      monthEl.value =
+      weekdayEl.value =
+        "*";
     currentJobId = null;
     updateCronPreview();
-    
     const submitBtn = schedulerForm.querySelector("button[type='submit']");
     submitBtn.textContent = "Add Job";
   }
 
   function editJob(jobId) {
     fetch(`http://${window.location.hostname}:9091/api/cron/job/${jobId}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.job) {
           const job = data.job;
           jobNameEl.value = job.name;
           commandEl.value = job.command;
-          
           const scheduleParts = job.schedule.split(" ");
           if (scheduleParts.length === 6) {
             secondEl.value = scheduleParts[0];
@@ -564,73 +577,90 @@ function scheduler() {
             monthEl.value = scheduleParts[4];
             weekdayEl.value = scheduleParts[5];
           }
-          
+
           updateCronPreview();
           currentJobId = jobId;
-          
-          const submitBtn = schedulerForm.querySelector("button[type='submit']");
+          const submitBtn = schedulerForm.querySelector(
+            "button[type='submit']",
+          );
           submitBtn.textContent = "Update Job";
         } else {
           notify("Scheduler", NotificationType.ERROR, "Job not found");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         notify("Scheduler", NotificationType.ERROR, error.message);
       });
   }
 
   function deleteJob(jobId) {
     if (confirm("Are you sure you want to delete this job?")) {
-      fetch(`http://${window.location.hostname}:9091/api/cron/delete/${jobId}`, {
-        method: "DELETE"
-      })
-        .then(response => response.json())
-        .then(data => {
+      fetch(
+        `http://${window.location.hostname}:9091/api/cron/delete/${jobId}`,
+        {
+          method: "DELETE",
+        },
+      )
+        .then((response) => response.json())
+        .then((data) => {
           if (data.success) {
             fetchJobs();
-            notify("Scheduler", NotificationType.SUCCESS, "Job deleted successfully");
-            
+            notify(
+              "Scheduler",
+              NotificationType.SUCCESS,
+              "Job deleted successfully",
+            );
             if (currentJobId === jobId) {
               resetForm();
             }
           } else {
-            notify("Scheduler", NotificationType.ERROR, data.error || "Failed to delete job");
+            notify(
+              "Scheduler",
+              NotificationType.ERROR,
+              data.error || "Failed to delete job",
+            );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           notify("Scheduler", NotificationType.ERROR, error.message);
         });
     }
   }
-  
+
   function toggleJobStatus(jobId, isRunning) {
     const action = isRunning ? "pause" : "resume";
-    
-    fetch(`http://${window.location.hostname}:9091/api/cron/${action}/${jobId}`, {
-      method: "POST"
-    })
-      .then(response => response.json())
-      .then(data => {
+    fetch(
+      `http://${window.location.hostname}:9091/api/cron/${action}/${jobId}`,
+      {
+        method: "POST",
+      },
+    )
+      .then((response) => response.json())
+      .then((data) => {
         if (data.success) {
           fetchJobs();
-          notify("Scheduler", NotificationType.SUCCESS, 
-            `Job ${isRunning ? "paused" : "resumed"} successfully`);
+          notify(
+            "Scheduler",
+            NotificationType.SUCCESS,
+            `Job ${isRunning ? "paused" : "resumed"} successfully`,
+          );
         } else {
-          notify("Scheduler", NotificationType.ERROR, 
-            data.error || `Failed to ${action} job`);
+          notify(
+            "Scheduler",
+            NotificationType.ERROR,
+            data.error || `Failed to ${action} job`,
+          );
         }
       })
-      .catch(error => {
+      .catch((error) => {
         notify("Scheduler", NotificationType.ERROR, error.message);
       });
   }
 
   schedulerForm.addEventListener("submit", addJob);
   refreshBtn.addEventListener("click", fetchJobs);
-
   updateCronPreview();
   fetchJobs();
-  
   setInterval(() => {
     fetchJobs();
   }, 30000);

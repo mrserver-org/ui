@@ -25,5 +25,7 @@ function loadapp() {
     `,
     400,
     300,
+    false,
+    "📦",
   );
 }

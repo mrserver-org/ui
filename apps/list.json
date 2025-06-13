@@ -35,8 +35,8 @@
     "function": "fm()"
   },
   {
-	"name": "Scheduler",
-	"icon": "⏲️",
-	"function": "scheduler()"
+    "name": "Scheduler",
+    "icon": "⏲️",
+    "function": "scheduler()"
   }
 ]

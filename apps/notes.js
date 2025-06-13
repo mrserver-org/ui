@@ -9,6 +9,6 @@ function notes() {
     400,
     300,
     false,
-    "📝"
+    "📝",
   );
 } /* MUST NOT END WITH A SEMICOLON */

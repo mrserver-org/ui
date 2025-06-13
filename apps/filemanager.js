@@ -1,6 +1,5 @@
 let currentPath = "/";
 let history = [currentPath];
-
 async function getOS() {
   const os = await fetch(
     "http://" + window.location.host.split(":")[0] + ":9091" + "/api/system",
@@ -13,7 +12,6 @@ async function getOS() {
 }
 
 getOS();
-
 async function fileContent(fullPath) {
   const isImage =
     fullPath.endsWith(".png") ||
@@ -53,6 +51,8 @@ async function fileContent(fullPath) {
         `,
       400,
       300,
+      false,
+      "🖼️",
     );
   } else {
     notesEdit(fullPath, content);
@@ -211,11 +211,11 @@ function fm() {
             }
 
             .folder-icon {
-                color: #DCB67A;
+                color: var(--text);
             }
 
             .file-icon {
-                color: #8E9199;
+                color: var(--border);
             }
         </style>
         <div class="file-manager">
@@ -246,7 +246,7 @@ function fm() {
                 <div id="fileList"></div>
             </div>
         </div>
-    `,
+    `, 400, 300, false, "📂"
   );
   loadDirectory(currentPath);
 }

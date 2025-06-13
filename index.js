@@ -86,6 +86,43 @@ function notify(app, type, message) {
   }, 5000);
 }
 
+async function generateApps() {
+  const apps = []; 
+  try {
+    const systemResponse = await fetch("./apps/list.json");
+    const systemData = await systemResponse.json();
+    systemData.forEach((app) => {
+      apps.push({
+        title: app.name,
+        subtitle: "System App",
+        icon: app.icon,
+        category: "builtin",
+        function: app.function
+      });
+    });
+  } catch (error) {
+    console.error("Failed to load system apps:", error);
+  }
+  
+  try {
+    const thirdPartyResponse = await fetch("./3rd_party_apps/list.json");
+    const thirdPartyData = await thirdPartyResponse.json();
+    thirdPartyData.forEach((app) => {
+      apps.push({
+        title: app.name,
+        subtitle: "Third-Party App",
+        icon: app.icon,
+        category: "thirdparty",
+        function: app.function
+      });
+    });
+  } catch (error) {
+    console.error("Failed to load third-party apps:", error);
+  }
+  
+  return apps;
+}
+
 function generateStartApps() {
   document.querySelector(".start-content").innerHTML = "";
   fetch("./apps/list.json")
@@ -186,21 +223,17 @@ $("#desktop").contextmenu(function (ev) {
 let windows = [];
 let activeWindow = null;
 let highestZIndex = 1;
-
 function makeResizable(window, handle, direction) {
   handle.addEventListener("mousedown", initResize);
-
   function initResize(e) {
     e.stopPropagation();
     focusWindow(window);
-
     const startX = e.clientX;
     const startY = e.clientY;
     const startWidth = window.offsetWidth;
     const startHeight = window.offsetHeight;
     const startLeft = window.offsetLeft;
     const startTop = window.offsetTop;
-
     function resize(e) {
       if (direction.includes("e")) {
         const width = startWidth + (e.clientX - startX);

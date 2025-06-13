@@ -33,3 +33,6 @@ Before: `alert(message)` (old one can be called using `mralert(message)`
 - Made system info app real-time info. (beta)
 - Added Taskbar Icons, that focuses windows and destroyes if the window is destroyed (beta, might have bugs)
 - Added Auto-Maximize Windows if device is a phone/small screen device.
+- New feature! `QuickLaunch`, a Spotlight Search (like) app launcher for MrServer. (+ customizable keyboard shortcut. default: meta+k)
+- Added New API! (`await generateApps()`) which gives an array of the system and third-party apps. example: `[{"title": "app name", "icon": "icon", "subtitle": "System App", "category": "system", "function": "appfunction()"}]`
+- Made folder and file icons in File Manager adaptive to theme

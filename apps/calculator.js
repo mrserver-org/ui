@@ -25,7 +25,7 @@ function calculator() {
     300,
     400,
     false,
-    "🔢"
+    "🔢",
   );
 
   let display = calcWindow.querySelector("#calc-display");

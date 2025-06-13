@@ -19,5 +19,7 @@ function jsexec() {
     `,
     400,
     300,
+    false,
+    "~",
   );
 }
