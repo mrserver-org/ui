@@ -1,6 +1,6 @@
 {
   "name": "mrserver-ui",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "MrServer's frontend.",
   "scripts": {
     "start": "npx http-server -p 1101 -c-1",

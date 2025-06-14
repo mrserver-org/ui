@@ -1,4 +1,4 @@
-v1.0.0
+v1.0.0 "Apollo"
 
 - Initital Release
 
@@ -19,7 +19,7 @@ v1.2.1
 - Fixed terminal not authenticating properly.
 - Fixed File Manager not loading images
 
-WIP
+v2.0.0 "Blitz"
 
 - Added new built-in app, Process Manager!
 - Modified `alert` API to use MrServer windows.
@@ -50,3 +50,4 @@ WIP
 - Added New API! `createWidget(id, html, width, height, x, y, updateFn, options = {})`
 - Fixed order in JS files.
 - New built-in app! MrTile, dynamic tiling for MrServer! activate it from the settings.
+- New built-in app! MrSnap, window snapping for MrServer! activate it from the settings.

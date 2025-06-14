@@ -66,44 +66,44 @@ class MrTile {
   setupKeyBindings() {
     document.addEventListener("keydown", (e) => {
       if (!this.enabled) return;
-      if (e.altKey && e.key === "t") {
+      if (e.ctrlKey && e.key === "t") {
         e.preventDefault();
         this.toggle();
       }
 
-      if (e.altKey && e.key === "f") {
+      if (e.ctrlKey && e.key === "f") {
         e.preventDefault();
         if (this.focusedWindow) {
           this.toggleFloat(this.focusedWindow);
         }
       }
 
-      if (e.altKey && e.key === "j") {
+      if (e.ctrlKey && e.key === "j") {
         e.preventDefault();
         this.focusNext();
       }
 
-      if (e.altKey && e.key === "k") {
+      if (e.ctrlKey && e.key === "k") {
         e.preventDefault();
         this.focusPrev();
       }
 
-      if (e.altKey && e.key === "h") {
+      if (e.ctrlKey && e.key === "h") {
         e.preventDefault();
         this.adjustMasterRatio(-0.05);
       }
 
-      if (e.altKey && e.key === "l") {
+      if (e.ctrlKey && e.key === "l") {
         e.preventDefault();
         this.adjustMasterRatio(0.05);
       }
 
-      if (e.altKey && e.key === "Enter") {
+      if (e.ctrlKey && e.key === "Enter") {
         e.preventDefault();
         this.swapWithMaster();
       }
 
-      if (e.altKey && (e.key === "1" || e.key === "2" || e.key === "3")) {
+      if (e.ctrlKey && (e.key === "1" || e.key === "2" || e.key === "3")) {
         e.preventDefault();
         const layouts = ["dwindle", "master", "grid"];
         this.setLayout(layouts[parseInt(e.key) - 1]);
@@ -404,7 +404,7 @@ class MrTile {
 }
 
 registerAppSettings("mrtile", {
-  title: "MrTile",
+  title: "Window Tiling (MrTile)",
   controls: [
     {
       id: "tile",
