@@ -169,3 +169,11 @@
   resize: both;
   overflow: auto;
 }
+
+.window.tiled {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.window.tiled.focused {
+  border: 2px solid var(--accent);
+}

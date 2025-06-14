@@ -49,3 +49,4 @@ WIP
 - Added new feature! Widgets are here!
 - Added New API! `createWidget(id, html, width, height, x, y, updateFn, options = {})`
 - Fixed order in JS files.
+- New built-in app! MrTile, dynamic tiling for MrServer! activate it from the settings.

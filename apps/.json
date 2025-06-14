@@ -12,5 +12,6 @@
   "processmanager",
   "cron",
   "quicklaunch",
-  "time-widget"
+  "time-widget",
+  "mrtile"
 ]

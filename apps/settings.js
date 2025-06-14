@@ -155,7 +155,6 @@ function settings() {
 .slider-container {
     position: relative;
     width: 300px;
-    padding: 40px 0;
   }
 
   .value-bubble {
