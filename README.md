@@ -9,7 +9,7 @@
 
 ## 🤔 Features
 
-- 📦  **Ultra Modular**: Add, remove, and configure **apps** to fit your needs.
+- 📦 **Ultra Modular**: Add, remove, and configure **apps** to fit your needs.
 - 🎨 **100% Customizable**: Tailor the UI and functionality just the way you like.
 - 💻 **Desktop-Like UX**: Intuitive and familiar interface designed for efficiency.
 - 🤔 **Powerful Management Tools**: Manage your files, open up the terminal and even rebooting the server!

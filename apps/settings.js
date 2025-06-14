@@ -4,49 +4,55 @@ function registerAppSettings(id, config) {
 }
 
 function generateAppSettingsHTML() {
-  return settingsSections.map(section => {
-    const controls = section.controls.map(control => {
-      let controlHTML = '';      
-      switch(control.type) {
-        case 'select':
-          const options = control.options.map(opt => 
-            `<option value="${opt.value}">${opt.label}</option>`
-          ).join('');
-          controlHTML = `<select id="${control.id}" name="${control.id}" class="dropdown-control">${options}</select>`;
-          break;
-        case 'text':
-          controlHTML = `<input type="text" id="${control.id}" class="text-control" placeholder="${control.placeholder || ''}" ${control.readonly ? 'readonly' : ''}>`;
-          break;
-        case 'number':
-          controlHTML = `<input type="number" id="${control.id}" class="text-control" min="${control.min || ''}" max="${control.max || ''}" step="${control.step || '1'}">`;
-          break;
-        case 'checkbox':
-          controlHTML = `<input type="checkbox" id="${control.id}" class="checkbox-control">`;
-          break;
-        case 'range':
-          controlHTML = `<div class="slider-container"><input type="range" id="${control.id}" class="range-control" min="${control.min || 0}" max="${control.max || 100}" step="${control.step || 1}"></input><div class="value-bubble bubble">16</div></div>`;
-          break;
-        default:
-          controlHTML = `<input type="text" id="${control.id}" class="text-control">`;
-      }
-      
-      return `
+  return settingsSections
+    .map((section) => {
+      const controls = section.controls
+        .map((control) => {
+          let controlHTML = "";
+          switch (control.type) {
+            case "select":
+              const options = control.options
+                .map(
+                  (opt) => `<option value="${opt.value}">${opt.label}</option>`,
+                )
+                .join("");
+              controlHTML = `<select id="${control.id}" name="${control.id}" class="dropdown-control">${options}</select>`;
+              break;
+            case "text":
+              controlHTML = `<input type="text" id="${control.id}" class="text-control" placeholder="${control.placeholder || ""}" ${control.readonly ? "readonly" : ""}>`;
+              break;
+            case "number":
+              controlHTML = `<input type="number" id="${control.id}" class="text-control" min="${control.min || ""}" max="${control.max || ""}" step="${control.step || "1"}">`;
+              break;
+            case "checkbox":
+              controlHTML = `<input type="checkbox" id="${control.id}" class="checkbox-control">`;
+              break;
+            case "range":
+              controlHTML = `<div class="slider-container"><input type="range" id="${control.id}" class="range-control" min="${control.min || 0}" max="${control.max || 100}" step="${control.step || 1}"></input><div class="value-bubble bubble">16</div></div>`;
+              break;
+            default:
+              controlHTML = `<input type="text" id="${control.id}" class="text-control">`;
+          }
+
+          return `
         <div class="control-group">
           <label for="${control.id}" class="control-label">${control.label}</label>
           <div class="control-wrapper">
             ${controlHTML}
-            ${control.description ? `<div class="control-description">${control.description}</div>` : ''}
+            ${control.description ? `<div class="control-description">${control.description}</div>` : ""}
           </div>
         </div>
       `;
-    }).join('');
-    return `
+        })
+        .join("");
+      return `
       <fieldset class="settings-group">
         <legend class="group-title">${section.title}</legend>
         ${controls}
       </fieldset>
     `;
-  }).join('');
+    })
+    .join("");
 }
 
 function settings() {
@@ -174,9 +180,9 @@ function settings() {
     480,
     400,
     false,
-    "⚙️"
+    "⚙️",
   );
-  
+
   fetch("/themes/list.json")
     .then((response) => response.json())
     .then((data) => {
@@ -190,7 +196,8 @@ function settings() {
     });
 
   const shortcutInput = document.getElementById("quicklaunch-shortcut");
-  const savedShortcut = localStorage.getItem("quicklaunch.keyboardshortcut") || "meta+k";
+  const savedShortcut =
+    localStorage.getItem("quicklaunch.keyboardshortcut") || "meta+k";
   shortcutInput.value = savedShortcut;
   let isCapturing = false;
   shortcutInput.addEventListener("focus", () => {
@@ -210,11 +217,11 @@ function settings() {
     if (e.ctrlKey || e.metaKey) {
       keys.push("meta");
     }
-    
+
     if (!["Control", "Meta", "Cmd"].includes(e.key)) {
       keys.push(e.key.toLowerCase());
     }
-    
+
     if (keys.length > 1) {
       shortcutInput.value = keys.join("+");
     }
@@ -234,29 +241,30 @@ function settings() {
 }
 
 function loadAppSettings() {
-  settingsSections.forEach(section => {
-    section.controls.forEach(control => {
+  settingsSections.forEach((section) => {
+    section.controls.forEach((control) => {
       const element = document.getElementById(control.id);
       if (!element) return;
-      const savedValue = localStorage.getItem(`${section.id}.${control.id}`) || control.default;
-      switch(control.type) {
-        case 'checkbox':
-          element.checked = savedValue === 'true';
+      const savedValue =
+        localStorage.getItem(`${section.id}.${control.id}`) || control.default;
+      switch (control.type) {
+        case "checkbox":
+          element.checked = savedValue === "true";
           break;
-        case 'range':
-        case 'number':
+        case "range":
+        case "number":
           element.value = savedValue || control.default || 0;
           break;
         default:
-          element.value = savedValue || control.default || '';
+          element.value = savedValue || control.default || "";
       }
     });
   });
 }
 function initRangeBubbles() {
-  document.querySelectorAll('.slider-container').forEach(container => {
+  document.querySelectorAll(".slider-container").forEach((container) => {
     const range = container.querySelector('input[type="range"]');
-    const bubble = container.querySelector('.value-bubble');
+    const bubble = container.querySelector(".value-bubble");
     function updateBubble() {
       const val = range.value;
       const min = range.min;
@@ -266,26 +274,26 @@ function initRangeBubbles() {
       bubble.style.left = `${offset}px`;
       bubble.textContent = val;
     }
-    range.addEventListener('input', updateBubble);
+    range.addEventListener("input", updateBubble);
     updateBubble();
   });
 }
 
 initRangeBubbles();
 function saveAppSettings() {
-  settingsSections.forEach(section => {
-    section.controls.forEach(control => {
+  settingsSections.forEach((section) => {
+    section.controls.forEach((control) => {
       const element = document.getElementById(control.id);
       if (!element) return;
       let value;
-      switch(control.type) {
-        case 'checkbox':
+      switch (control.type) {
+        case "checkbox":
           value = element.checked.toString();
           break;
         default:
           value = element.value;
       }
-      
+
       localStorage.setItem(`${section.id}.${control.id}`, value);
     });
   });

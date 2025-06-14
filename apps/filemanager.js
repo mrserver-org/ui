@@ -246,7 +246,11 @@ function fm() {
                 <div id="fileList"></div>
             </div>
         </div>
-    `, 400, 300, false, "📂"
+    `,
+    400,
+    300,
+    false,
+    "📂",
   );
   loadDirectory(currentPath);
 }

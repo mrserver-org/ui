@@ -5,7 +5,7 @@ v1.0.0
 v1.1.0
 
 - Added a seperate non-git-checked folder ("third_party_apps") for third party apps.s
-- Added support for ESM in apps if their file name starts with "m_". e.g. "m_calculator.js".
+- Added support for ESM in apps if their file name starts with "m\_". e.g. "m_calculator.js".
 - Added `expose(func)` to expose functions if using ESM.
 
 v1.2.0
@@ -23,8 +23,8 @@ WIP
 
 - Added new built-in app, Process Manager!
 - Modified `alert` API to use MrServer windows.
-Now: `alert(message, title = "Alert", width = 400, height = 400)`
-Before: `alert(message)` (old one can be called using `mralert(message)`
+  Now: `alert(message, title = "Alert", width = 400, height = 400)`
+  Before: `alert(message)` (old one can be called using `mralert(message)`
 - Reduced themes file sizes by putting universal stuff in global.css
 - Added Scheduler App
 - Material 3 Theme! (+ wallpaper)
@@ -39,12 +39,13 @@ Before: `alert(message)` (old one can be called using `mralert(message)`
 - Added New API! `moveWindowTo(x, y, animate = false)`
 - New feature! Registering app settings and users modify app settings from the MrServer Settings App.
 - Added New API! `registerAppSettings(id, config)`:
-    `id` is the App ID.
-    `config` is an `Object` with `title`, `controls`.
-        `controls` is an object array with these for each object:
-            `id`, `type` (range, number, select, checkbox, text (default)), `label`, `min` (number,range), `max` (number,range), `step` (number,range), `default`, `placeholder` (text), `readonly` (text), `value` (select)
+  `id` is the App ID.
+  `config` is an `Object` with `title`, `controls`.
+  `controls` is an object array with these for each object:
+  `id`, `type` (range, number, select, checkbox, text (default)), `label`, `min` (number,range), `max` (number,range), `step` (number,range), `default`, `placeholder` (text), `readonly` (text), `value` (select)
 
 - Added New API! `getAppSetting(appId, settingId, fallback = null)`
 - Added New API! `setAppSetting(appId, settingId, value)`
 - Added new feature! Widgets are here!
 - Added New API! `createWidget(id, html, width, height, x, y, updateFn, options = {})`
+- Fixed order in JS files.

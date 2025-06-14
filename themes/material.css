@@ -354,52 +354,54 @@ button {
 }
 
 :root {
---primary:#9ecaff;
---on-primary:#003258;
---primary-container:#00497d;
---on-primary-container:#d1e4ff;
---secondary:#bbc7db;
---on-secondary:#253140;
---secondary-container:#3b4858;
---on-secondary-container:#d7e3f7;
---tertiary:#d6bee4;
---on-tertiary:#3b2948;
---tertiary-container:#523f5f;
---on-tertiary-container:#f2daff;
---error:#ffb4ab;
---on-error:#690005;
---error-container:#93000a;
---on-error-container:#ffb4ab;
---background:#1a1c1e;
---on-background:#e2e2e6;
---surface:#121316;
---on-surface:#e2e2e6;
---surface-variant:#43474e;
---on-surface-variant:#c3c7cf;
---outline:#8d9199;
---outline-variant:#43474e;
---shadow:#000000;
---scrim:#000000;
---inverse-surface:#e2e2e6;
---inverse-on-surface:#2f3033;
---inverse-primary:#0061a4;
---surface-dim:#121316;
---surface-bright:#38393c;
---surface-container-lowest:#0d0e11;
---surface-container-low:#1a1c1e;
---surface-container:#1e2022;
---surface-container-high:#282a2d;
---surface-container-highest:#333538;
-  --md-shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  --md-shadow-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  --md-shadow-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-  --md-shadow-4: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  --md-shadow-5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+  --primary: #9ecaff;
+  --on-primary: #003258;
+  --primary-container: #00497d;
+  --on-primary-container: #d1e4ff;
+  --secondary: #bbc7db;
+  --on-secondary: #253140;
+  --secondary-container: #3b4858;
+  --on-secondary-container: #d7e3f7;
+  --tertiary: #d6bee4;
+  --on-tertiary: #3b2948;
+  --tertiary-container: #523f5f;
+  --on-tertiary-container: #f2daff;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffb4ab;
+  --background: #1a1c1e;
+  --on-background: #e2e2e6;
+  --surface: #121316;
+  --on-surface: #e2e2e6;
+  --surface-variant: #43474e;
+  --on-surface-variant: #c3c7cf;
+  --outline: #8d9199;
+  --outline-variant: #43474e;
+  --shadow: #000000;
+  --scrim: #000000;
+  --inverse-surface: #e2e2e6;
+  --inverse-on-surface: #2f3033;
+  --inverse-primary: #0061a4;
+  --surface-dim: #121316;
+  --surface-bright: #38393c;
+  --surface-container-lowest: #0d0e11;
+  --surface-container-low: #1a1c1e;
+  --surface-container: #1e2022;
+  --surface-container-high: #282a2d;
+  --surface-container-highest: #333538;
+  --md-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --md-shadow-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --md-shadow-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  --md-shadow-4:
+    0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  --md-shadow-5:
+    0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   --md-spacing-unit: 8px;
   --md-border-radius-sm: 4px;
   --md-border-radius: 8px;
   --md-border-radius-lg: 16px;
-  --md-animation-curve: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --md-animation-curve: cubic-bezier(0.4, 0, 0.2, 1);
   --md-animation-time: 0.3s;
   --bg-color: var(--secondary);
   --window-bg: var(--background);
@@ -428,12 +430,14 @@ button {
   background-position: 50%;
   transform: scale(10, 10);
   opacity: 0;
-  transition: transform .5s, opacity 1s;
+  transition:
+    transform 0.5s,
+    opacity 1s;
 }
 
 .ripple:active:after {
   transform: scale(0, 0);
-  opacity: .3;
+  opacity: 0.3;
   transition: 0s;
 }
 
@@ -468,7 +472,9 @@ button,
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: background 0.3s, box-shadow 0.3s;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
   outline: none;
 }
 
@@ -572,7 +578,8 @@ select:focus {
   border-bottom-color: var(--primary);
 }
 
-.card, .resource-item {
+.card,
+.resource-item {
   background: var(--surface-container);
   border-radius: var(--md-border-radius) !important;
   box-shadow: var(--md-shadow-1);
@@ -581,7 +588,8 @@ select:focus {
   transition: box-shadow 0.3s;
 }
 
-.card:hover, .resource-item:hover {
+.card:hover,
+.resource-item:hover {
   box-shadow: var(--md-shadow-2);
 }
 
@@ -614,7 +622,9 @@ select:focus {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
   border: none;
 }
 
@@ -742,7 +752,7 @@ select:focus {
   right: 0;
   bottom: 0;
   background-color: var(--surface-variant);
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 34px !important;
 }
 
@@ -754,7 +764,7 @@ select:focus {
   left: 0;
   bottom: -3px;
   background-color: var(--surface-bright);
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50% !important;
   box-shadow: var(--md-shadow-1);
 }
@@ -793,7 +803,9 @@ select:focus {
 
 #start-button {
   border-radius: var(--md-border-radius) !important;
-  transition: background 0.3s, transform 0.2s;
+  transition:
+    background 0.3s,
+    transform 0.2s;
 }
 
 #start-button:hover {
@@ -820,7 +832,10 @@ select:focus {
   border-radius: var(--md-border-radius) !important;
   font-weight: 500;
   box-shadow: var(--md-shadow-1);
-  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s,
+    transform 0.2s;
 }
 
 .calc-button:hover {
@@ -856,18 +871,32 @@ textarea.notes {
   overflow: hidden;
 }
 
-.elevation-1 { box-shadow: var(--md-shadow-1); }
-.elevation-2 { box-shadow: var(--md-shadow-2); }
-.elevation-3 { box-shadow: var(--md-shadow-3); }
-.elevation-4 { box-shadow: var(--md-shadow-4); }
-.elevation-5 { box-shadow: var(--md-shadow-5); }
+.elevation-1 {
+  box-shadow: var(--md-shadow-1);
+}
+.elevation-2 {
+  box-shadow: var(--md-shadow-2);
+}
+.elevation-3 {
+  box-shadow: var(--md-shadow-3);
+}
+.elevation-4 {
+  box-shadow: var(--md-shadow-4);
+}
+.elevation-5 {
+  box-shadow: var(--md-shadow-5);
+}
 .fade-in {
   animation: md-fade-in 0.3s var(--md-animation-curve);
 }
 
 @keyframes md-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .slide-up {
@@ -875,8 +904,14 @@ textarea.notes {
 }
 
 @keyframes md-slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .container {
@@ -907,8 +942,9 @@ textarea.notes {
 
 .notification {
   background-color: var(--window-bg) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important,
-              0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.1) !important,
+    0 2px 6px rgba(0, 0, 0, 0.08) !important;
   border-radius: 24px !important;
   border-left: none !important;
   overflow: hidden !important;

@@ -1,4 +1,4 @@
-const container = document.getElementById('notifications-container');
+const container = document.getElementById("notifications-container");
 let notificationCounter = 0;
 const NotificationType = {
   INFO: "info",
@@ -8,14 +8,14 @@ const NotificationType = {
 };
 
 const mrfetch = window.fetch;
-window.fetch = function(input, init = {}) {
+window.fetch = function (input, init = {}) {
   const credentials = JSON.parse(localStorage.getItem("credentials") || "{}");
   init.headers = {
     ...(init.headers || {}),
     username: credentials.username,
-    password: credentials.password
+    password: credentials.password,
   };
-  
+
   return mrfetch(input, init);
 };
 
@@ -24,14 +24,18 @@ function isPhone() {
 }
 
 function isMobileUserAgent() {
-  return /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  return /Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
 }
 
 const mralert = window.alert;
-window.alert = function(message, title = "Alert", width = 100, height = 50) {
-  let alertId = message.trim().substr(1,9) + title.trim(); // tbh, thats weird ID idea ever
+window.alert = function (message, title = "Alert", width = 100, height = 50) {
+  let alertId = message.trim().substr(1, 9) + title.trim(); // tbh, thats weird ID idea ever
   let alertBox;
-  alertBox = createWindow(title,`
+  alertBox = createWindow(
+    title,
+    `
         <div class="dialog alert-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%;">
 		    <div class="alert-message dialog-title">${title}</div>
             <div class="alert-message dialog-content">${message}</div>
@@ -40,12 +44,16 @@ window.alert = function(message, title = "Alert", width = 100, height = 50) {
                 <button class="alert-button" id="${alertId}">OK</button>
             </div>
         </div>
-    `, width, height, true);
+    `,
+    width,
+    height,
+    true,
+  );
   alertBox.querySelector(".window-header").remove();
   alertBox.style.top = `40%`;
   alertBox.style.left = `40%`;
   document.getElementById(alertId).onclick = () => {
-	  closeWindow(alertBox);
+    closeWindow(alertBox);
   };
 };
 
@@ -87,7 +95,7 @@ function notify(app, type, message) {
 }
 
 async function generateApps() {
-  const apps = []; 
+  const apps = [];
   try {
     const systemResponse = await fetch("./apps/list.json");
     const systemData = await systemResponse.json();
@@ -97,13 +105,13 @@ async function generateApps() {
         subtitle: "System App",
         icon: app.icon,
         category: "builtin",
-        function: app.function
+        function: app.function,
       });
     });
   } catch (error) {
     console.error("Failed to load system apps:", error);
   }
-  
+
   try {
     const thirdPartyResponse = await fetch("./3rd_party_apps/list.json");
     const thirdPartyData = await thirdPartyResponse.json();
@@ -113,13 +121,13 @@ async function generateApps() {
         subtitle: "Third-Party App",
         icon: app.icon,
         category: "thirdparty",
-        function: app.function
+        function: app.function,
       });
     });
   } catch (error) {
     console.error("Failed to load third-party apps:", error);
   }
-  
+
   return apps;
 }
 
@@ -167,16 +175,17 @@ function auth_check() {
   const user = JSON.parse(localStorage.getItem("credentials"));
   if (user) {
     fetch(
-      "http://" + window.location.host.split(":")[0] + ":9091" + "/api/login", {
-		  method: "POST",
-		  headers: {
-			'Content-Type': 'application/json',
-		  },
-	  }
+      "http://" + window.location.host.split(":")[0] + ":9091" + "/api/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
     )
       .then((response) => response.json())
       .then((data) => {
-        const isuser = !data.error
+        const isuser = !data.error;
         if (isuser) {
           createDesktopIcons();
         } else {
@@ -289,50 +298,58 @@ function moveWindowTo(thewindow, x, y, animate = false) {
         requestAnimationFrame(animateMove);
       }
     }
-    
+
     requestAnimationFrame(animateMove);
   } else {
-    if (!typeof(x) == "string") {
+    if (!typeof x == "string") {
       thewindow.style.left = x + "px";
     } else {
       thewindow.style.left = x;
     }
-    if (!typeof(y) == "string") {
+    if (!typeof y == "string") {
       thewindow.style.top = y + "px";
     } else {
       thewindow.style.top = y;
     }
   }
-  
+
   focusWindow(thewindow);
 }
 
 function createWidget(id, html, width, height, x, y, updateFn, options = {}) {
-  const w = createWindow(`widget-${id} dialog alert-box`, html, width, height, true, "", false);
+  const w = createWindow(
+    `widget-${id} dialog alert-box`,
+    html,
+    width,
+    height,
+    true,
+    "",
+    false,
+  );
   w.querySelector(".window-header")?.remove();
-  w.querySelectorAll(".resize-handle").forEach(el => el.remove());
+  w.querySelectorAll(".resize-handle").forEach((el) => el.remove());
   w.style.resize = "none";
   w.style.userSelect = "none";
   w.style.zIndex = 0;
   w.classList.add("window-widget");
   w.querySelector(".window-content").style.padding = "0px";
-  if (typeof(x) === "string" || typeof(y) == "string") {
+  if (typeof x === "string" || typeof y == "string") {
     w.style.position = "absolute";
   }
-  if (typeof(x) === "string") {
+  if (typeof x === "string") {
     w.style.transform = `translateX(-${x})`;
     w.style.width = `${x * 2}%`;
     w.style.left = x;
   }
 
-  if (typeof(y) === "string") {
+  if (typeof y === "string") {
     w.style.transform = `translateY(-${y})`;
     w.style.height = `${y * 2}%`;
     w.style.top = y;
   }
 
   //edge case: both have a percentage
-  if (typeof(x) === "string" && typeof(y) === "string") {
+  if (typeof x === "string" && typeof y === "string") {
     w.style.transform = `translate(-${x}, -${y})`;
   }
 
@@ -361,20 +378,29 @@ function createWidget(id, html, width, height, x, y, updateFn, options = {}) {
   return w;
 }
 
-function createWindow(title, content, width = 400, height = 300, hidden = false, icon = "path", randomPosition = true) {
+function createWindow(
+  title,
+  content,
+  width = 400,
+  height = 300,
+  hidden = false,
+  icon = "path",
+  randomPosition = true,
+) {
   const window = document.createElement("div");
- window.classList = ["window"];
- window.id = "window-" + title.toLowerCase().replace(" ", "-");
- window.style.width = width + "px";
- window.style.height = height + "px";
- if (randomPosition) {
-  window.style.left = Math.random() * (window.innerWidth - width) + "px";
-  window.style.top = Math.random() * (window.innerHeight - height - 40) + "px";
- } else {
+  window.classList = ["window"];
+  window.id = "window-" + title.toLowerCase().replace(" ", "-");
+  window.style.width = width + "px";
+  window.style.height = height + "px";
+  if (randomPosition) {
+    window.style.left = Math.random() * (window.innerWidth - width) + "px";
+    window.style.top =
+      Math.random() * (window.innerHeight - height - 40) + "px";
+  } else {
     window.style.top = "0px";
     window.style.left = "0px";
   }
- window.innerHTML = `
+  window.innerHTML = `
   <div class="window-header ${title.toLowerCase().replace(" ", "-")}-header">
   <span>${title}</span>
   <div class="window-controls ${title.toLowerCase().replace(" ", "-")}-controls">
@@ -386,67 +412,67 @@ function createWindow(title, content, width = 400, height = 300, hidden = false,
  ${content}
   </div>
   `;
- const handles = [
-  { class: "resize-n", style: "top: 0; left: 0; right: 0; height: 5px;" },
-  { class: "resize-e", style: "top: 0; right: 0; bottom: 0; width: 5px;" },
-  { class: "resize-s", style: "bottom: 0; left: 0; right: 0; height: 5px;" },
-  { class: "resize-w", style: "top: 0; left: 0; bottom: 0; width: 5px;" },
-  { class: "resize-ne", style: "top: 0; right: 0; width: 5px; height: 5px;" },
-  { class: "resize-nw", style: "top: 0; left: 0; width: 5px; height: 5px;" },
-  {
- class: "resize-se",
- style: "bottom: 0; right: 0; width: 5px; height: 5px;",
-  },
-  {
- class: "resize-sw",
- style: "bottom: 0; left: 0; width: 5px; height: 5px;",
-  },
+  const handles = [
+    { class: "resize-n", style: "top: 0; left: 0; right: 0; height: 5px;" },
+    { class: "resize-e", style: "top: 0; right: 0; bottom: 0; width: 5px;" },
+    { class: "resize-s", style: "bottom: 0; left: 0; right: 0; height: 5px;" },
+    { class: "resize-w", style: "top: 0; left: 0; bottom: 0; width: 5px;" },
+    { class: "resize-ne", style: "top: 0; right: 0; width: 5px; height: 5px;" },
+    { class: "resize-nw", style: "top: 0; left: 0; width: 5px; height: 5px;" },
+    {
+      class: "resize-se",
+      style: "bottom: 0; right: 0; width: 5px; height: 5px;",
+    },
+    {
+      class: "resize-sw",
+      style: "bottom: 0; left: 0; width: 5px; height: 5px;",
+    },
   ];
- handles.forEach((handle) => {
- const div = document.createElement("div");
- div.className = `resize-handle ${handle.class}`;
- div.style.cssText = `position: absolute; ${handle.style}`;
- window.appendChild(div);
- makeResizable(window, div, handle.class);
+  handles.forEach((handle) => {
+    const div = document.createElement("div");
+    div.className = `resize-handle ${handle.class}`;
+    div.style.cssText = `position: absolute; ${handle.style}`;
+    window.appendChild(div);
+    makeResizable(window, div, handle.class);
   });
- document.getElementById("desktop").appendChild(window);
- makeWindowDraggable(window);
- windows.push(window);
- window.addEventListener("mousedown", () => {
- focusWindow(window);
+  document.getElementById("desktop").appendChild(window);
+  makeWindowDraggable(window);
+  windows.push(window);
+  window.addEventListener("mousedown", () => {
+    focusWindow(window);
   });
- window.querySelector(".close").addEventListener("click", () => {
- closeWindow(window);
+  window.querySelector(".close").addEventListener("click", () => {
+    closeWindow(window);
   });
- window.querySelector(".maximize").addEventListener("click", () => {
- maximizeWindow(window);
+  window.querySelector(".maximize").addEventListener("click", () => {
+    maximizeWindow(window);
   });
- if (!hidden) {
-   const titlemod = title ? title : "Settings";
-   const taskbarIcon = document.createElement("span");
-   taskbarIcon.className = "taskbar-icon start-button";
-   taskbarIcon.dataset.windowId = window.id;
-   taskbarIcon.title = titlemod;
-   taskbarIcon.id = "start-button";
-   taskbarIcon.style.position = "relative";
-   taskbarIcon.style.top = "-15px";
-   taskbarIcon.style.textAlign = "center";
-   taskbarIcon.style.maxHeight = "40px";
-   taskbarIcon.innerHTML = `${icon && icon != "path" ? icon : titlemod.charAt(0).toUpperCase()}`;
-   taskbarIcon.addEventListener("click", () => {
-     focusWindow(window);
-   });
-   taskbarIcon.addEventListener("destroy", () => {
-    document.querySelector("#start-buttons").removeChild(taskbarIcon);
-   });
-   document.querySelector("#start-buttons").appendChild(taskbarIcon);
-   if (isPhone() || isMobileUserAgent()) {
-     maximizeWindow(window);
-   }
+  if (!hidden) {
+    const titlemod = title ? title : "Settings";
+    const taskbarIcon = document.createElement("span");
+    taskbarIcon.className = "taskbar-icon start-button";
+    taskbarIcon.dataset.windowId = window.id;
+    taskbarIcon.title = titlemod;
+    taskbarIcon.id = "start-button";
+    taskbarIcon.style.position = "relative";
+    taskbarIcon.style.top = "-15px";
+    taskbarIcon.style.textAlign = "center";
+    taskbarIcon.style.maxHeight = "40px";
+    taskbarIcon.innerHTML = `${icon && icon != "path" ? icon : titlemod.charAt(0).toUpperCase()}`;
+    taskbarIcon.addEventListener("click", () => {
+      focusWindow(window);
+    });
+    taskbarIcon.addEventListener("destroy", () => {
+      document.querySelector("#start-buttons").removeChild(taskbarIcon);
+    });
+    document.querySelector("#start-buttons").appendChild(taskbarIcon);
+    if (isPhone() || isMobileUserAgent()) {
+      maximizeWindow(window);
+    }
   }
- focusWindow(window);
- return window;
- }
+  focusWindow(window);
+  return window;
+}
 
 function focusWindow(window) {
   activeWindow = window;
@@ -528,7 +554,9 @@ function createDesktopIcons() {
 }
 
 function closeWindow(thewindow) {
-  document.querySelector(`span[data-window-id="${thewindow.id}"]`).dispatchEvent(new Event("destroy"));
+  document
+    .querySelector(`span[data-window-id="${thewindow.id}"]`)
+    .dispatchEvent(new Event("destroy"));
   thewindow.remove();
   windows = windows.filter((w) => w !== thewindow);
 }
