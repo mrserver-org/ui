@@ -271,14 +271,109 @@ function makeResizable(window, handle, direction) {
   }
 }
 
-function createWindow(title, content, width = 400, height = 300, hidden = false, icon = "path") {
+function moveWindowTo(thewindow, x, y, animate = false) {
+  if (animate) {
+    const startX = thewindow.offsetLeft;
+    const startY = thewindow.offsetTop;
+    const deltaX = x - startX;
+    const deltaY = y - startY;
+    const duration = 300;
+    const startTime = performance.now();
+    function animateMove(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      thewindow.style.left = startX + deltaX * easeProgress + "px";
+      thewindow.style.top = startY + deltaY * easeProgress + "px";
+      if (progress < 1) {
+        requestAnimationFrame(animateMove);
+      }
+    }
+    
+    requestAnimationFrame(animateMove);
+  } else {
+    if (!typeof(x) == "string") {
+      thewindow.style.left = x + "px";
+    } else {
+      thewindow.style.left = x;
+    }
+    if (!typeof(y) == "string") {
+      thewindow.style.top = y + "px";
+    } else {
+      thewindow.style.top = y;
+    }
+  }
+  
+  focusWindow(thewindow);
+}
+
+function createWidget(id, html, width, height, x, y, updateFn, options = {}) {
+  const w = createWindow(`widget-${id} dialog alert-box`, html, width, height, true, "", false);
+  w.querySelector(".window-header")?.remove();
+  w.querySelectorAll(".resize-handle").forEach(el => el.remove());
+  w.style.resize = "none";
+  w.style.userSelect = "none";
+  w.style.zIndex = 0;
+  w.classList.add("window-widget");
+  w.querySelector(".window-content").style.padding = "0px";
+  if (typeof(x) === "string" || typeof(y) == "string") {
+    w.style.position = "absolute";
+  }
+  if (typeof(x) === "string") {
+    w.style.transform = `translateX(-${x})`;
+    w.style.width = `${x * 2}%`;
+    w.style.left = x;
+  }
+
+  if (typeof(y) === "string") {
+    w.style.transform = `translateY(-${y})`;
+    w.style.height = `${y * 2}%`;
+    w.style.top = y;
+  }
+
+  //edge case: both have a percentage
+  if (typeof(x) === "string" && typeof(y) === "string") {
+    w.style.transform = `translate(-${x}, -${y})`;
+  }
+
+  moveWindowTo(w, x, y, false);
+  if (options.transparent) {
+    w.style.background = "transparent";
+    w.style.backdropFilter = "blur(0px)";
+    w.style.border = "none";
+    w.style.boxShadow = "none";
+  }
+  if (options.blurBehind) {
+    w.style.backdropFilter = "blur(20px)";
+  }
+  setInterval(() => {
+    if (getComputedStyle(w).zIndex !== "0") {
+      w.style.zIndex = 0;
+    }
+  }, 50);
+  if (typeof updateFn === "function") {
+    setInterval(() => {
+      updateFn(w);
+    }, 200);
+  }
+  w.classList.remove("window");
+  w.classList.add("window-widget");
+  return w;
+}
+
+function createWindow(title, content, width = 400, height = 300, hidden = false, icon = "path", randomPosition = true) {
   const window = document.createElement("div");
  window.classList = ["window"];
  window.id = "window-" + title.toLowerCase().replace(" ", "-");
  window.style.width = width + "px";
  window.style.height = height + "px";
- window.style.left = Math.random() * (window.innerWidth - width) + "px";
- window.style.top = Math.random() * (window.innerHeight - height - 40) + "px";
+ if (randomPosition) {
+  window.style.left = Math.random() * (window.innerWidth - width) + "px";
+  window.style.top = Math.random() * (window.innerHeight - height - 40) + "px";
+ } else {
+    window.style.top = "0px";
+    window.style.left = "0px";
+  }
  window.innerHTML = `
   <div class="window-header ${title.toLowerCase().replace(" ", "-")}-header">
   <span>${title}</span>
@@ -364,9 +459,7 @@ function makeWindowDraggable(thewindow) {
     pos2 = 0,
     pos3 = 0,
     pos4 = 0;
-
   header.onmousedown = dragMouseDown;
-
   function dragMouseDown(e) {
     e.preventDefault();
     pos3 = e.clientX;
@@ -398,10 +491,8 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
-
 const startButton = document.getElementById("start-button");
 const startMenu = document.getElementById("start-menu");
-
 startButton.addEventListener("click", () => {
   startMenu.classList.toggle("active");
   generateStartApps();
@@ -454,6 +545,14 @@ function maximizeWindow(window) {
     window.style.top = "0";
     window.style.left = "0";
   }
+}
+
+function getAppSetting(appId, settingId, fallback = null) {
+  return localStorage.getItem(`${appId}.${settingId}`) || fallback;
+}
+
+function setAppSetting(appId, settingId, value) {
+  localStorage.setItem(`${appId}.${settingId}`, value);
 }
 
 auth_check();

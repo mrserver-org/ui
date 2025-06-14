@@ -53,7 +53,7 @@ body {
 #desktop {
   height: calc(100vh - 40px);
   position: relative;
-  background: url("/wallpapernature.jpg") center/cover;
+  background-image: url("/wallpapernature.jpg") center/cover;
   overflow: hidden;
 }
 

@@ -12,8 +12,7 @@
         async function loadScripts(url) {
           try {
             const response = await fetch("./" + url + "/.json");
-            const scripts = await response.json();
-      
+            const scripts = await response.json(); 
             scripts.forEach(script => {
               const scriptElement = document.createElement("script");
               scriptElement.src = `/${url}/${script}.js`;
@@ -30,7 +29,6 @@
             (function() {
             const savedTheme = localStorage.getItem('theme') || 'default';
             loadTheme(savedTheme);
-            
             function loadTheme(themeName) {
                 const oldLink = document.getElementById('theme-style');
                 if (oldLink) oldLink.remove();

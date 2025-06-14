@@ -1,7 +1,7 @@
 [
+  "settings",
   "calculator",
   "notes",
-  "settings",
   "terminal",
   "shutdown",
   "bye",
@@ -11,5 +11,6 @@
   "notes-edit",
   "processmanager",
   "cron",
-  "quicklaunch"
+  "quicklaunch",
+  "time-widget"
 ]
